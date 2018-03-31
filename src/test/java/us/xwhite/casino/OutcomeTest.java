@@ -29,7 +29,6 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -45,9 +44,6 @@ public class OutcomeTest {
     public void tearDown() {
     }
 
-    /**
-     * Test of winAmount method, of class Outcome.
-     */
     @Test
     public void testWinAmount() {
         Outcome instance = new Outcome("Test Outcome", 17);
@@ -58,9 +54,6 @@ public class OutcomeTest {
         Assert.assertEquals(85, instance.winAmount(5));
     }
 
-    /**
-     * Test of equals method, of class Outcome.
-     */
     @Test
     public void testEquals() {
         String outcomeName = "Test Outcome";

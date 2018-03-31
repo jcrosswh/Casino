@@ -25,38 +25,47 @@
  */
 package us.xwhite.casino;
 
-import java.util.Arrays;
+import java.util.Random;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
  *
  * @author Joel Crosswhite <joel.crosswhite@ix.netcom.com>
  */
-public class BinTest {
-
-    @Test
-    public void testContruction() {
-
-        Bin instance = new Bin();
-        Assert.assertNotNull(instance);
-        
-        Outcome[] outcomes = {new Outcome("Test Outcome", 1)};
-        instance = new Bin(outcomes);
-        Assert.assertNotNull(instance);
-        
-        instance = new Bin(Arrays.asList(new Outcome("Test Outcome", 1)));
-        Assert.assertNotNull(instance);
+public class WheelTest {
+    
+    private Wheel wheel;
+    
+    private final int seed = 4;
+    
+    @Before
+    public void setUp() {
+        Random rng = new NonRandom();
+        rng.setSeed(seed);
+        wheel = new Wheel(rng);
     }
-
+    
     @Test
-    public void testAdd() {
-        Outcome outcome = new Outcome("Test outcome", 5);
-        Bin instance = new Bin();
-        Assert.assertEquals(true, instance.add(outcome));
-
-        Assert.assertEquals(false, instance.add(outcome));
-
-        Assert.assertEquals(true, instance.add(new Outcome("Another outcome", 1)));
+    public void addTest() {
+        
+        Assert.assertTrue(wheel.add(0, new Outcome("Test outcome", 17)));
+        
+        Assert.assertTrue(wheel.add(17, new Outcome("Test outcome", 17)));
+    }
+    
+    @Test
+    public void getTest() {
+        
+        Outcome testOutcome = new Outcome("Test outcome", 17);
+        Assert.assertTrue(wheel.add(0, testOutcome));
+        Assert.assertNotNull(wheel.get(0));
+    }
+    
+    @Test
+    public void nextTest() {
+        
+        Assert.assertEquals(wheel.get(seed), wheel.next());
     }
 }
