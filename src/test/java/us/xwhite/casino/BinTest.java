@@ -36,21 +36,21 @@ import org.junit.Test;
 public class BinTest {
 
     @Test
-    public void testContruction() {
+    public void constructionTest() {
 
         Bin instance = new Bin();
         Assert.assertNotNull(instance);
-        
+
         Outcome[] outcomes = {new Outcome("Test Outcome", 1)};
         instance = new Bin(outcomes);
         Assert.assertNotNull(instance);
-        
+
         instance = new Bin(Arrays.asList(new Outcome("Test Outcome", 1)));
         Assert.assertNotNull(instance);
     }
 
     @Test
-    public void testAdd() {
+    public void addTest() {
         Outcome outcome = new Outcome("Test outcome", 5);
         Bin instance = new Bin();
         Assert.assertEquals(true, instance.add(outcome));
@@ -58,5 +58,17 @@ public class BinTest {
         Assert.assertEquals(false, instance.add(outcome));
 
         Assert.assertEquals(true, instance.add(new Outcome("Another outcome", 1)));
+    }
+
+    @Test
+    public void containsTest() {
+
+        Outcome outcome = new Outcome("Test outcome", 5);
+        Bin instance = new Bin();
+        instance.add(outcome);
+        
+        Assert.assertTrue(instance.contains(outcome));
+        
+        Assert.assertFalse(instance.contains(new Outcome("Some other outcome" ,7)));
     }
 }

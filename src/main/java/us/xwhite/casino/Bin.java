@@ -75,6 +75,16 @@ public class Bin {
     }
 
     /**
+     * Determine if a given bin contains a particular outcome
+     *
+     * @param outcome outcome to test
+     * @return true if the outcome is contained in this bin, false otherwise
+     */
+    public boolean contains(Outcome outcome) {
+        return outcomes.contains(outcome);
+    }
+
+    /**
      * Returns the string representation of this object
      *
      * @return a string representation of this object
