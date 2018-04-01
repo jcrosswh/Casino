@@ -26,7 +26,9 @@
 package us.xwhite.casino;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -45,6 +47,12 @@ public class Wheel {
     private final List<Bin> bins;
 
     private final Random rng;
+
+    private static final Map<String, Outcome> ALL_OUTCOMES;
+    
+    static {
+        ALL_OUTCOMES = new HashMap<>();
+    }
 
     /**
      * Create a Wheel with a random number generator
@@ -74,7 +82,15 @@ public class Wheel {
             throw new IndexOutOfBoundsException("Index value must be between 0 and Wheel.MAX_BINS");
         }
 
+        if (!ALL_OUTCOMES.containsKey(outcome.getName())) {
+            ALL_OUTCOMES.put(outcome.getName(), outcome);
+        }
+
         return bins.get(bin).add(outcome);
+    }
+    
+    public static Outcome getOutcome(String name) {
+        return ALL_OUTCOMES.get(name);
     }
 
     /**

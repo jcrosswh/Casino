@@ -25,7 +25,6 @@
  */
 package us.xwhite.casino;
 
-import java.util.Random;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,47 +33,22 @@ import org.junit.Test;
  *
  * @author Joel Crosswhite <joel.crosswhite@ix.netcom.com>
  */
-public class WheelTest {
+public class BetTest {
     
-    private Wheel wheel;
-    
-    private final int seed = 4;
+    private Bet bet;
     
     @Before
     public void setUp() {
-        Random rng = new NonRandom();
-        rng.setSeed(seed);
-        wheel = new Wheel(rng);
+        bet = new Bet(100, new Outcome("Test outcome", 17));
     }
     
     @Test
-    public void addTest() {
-        
-        Assert.assertTrue(wheel.add(0, new Outcome("Test outcome", 17)));
-        
-        Assert.assertTrue(wheel.add(17, new Outcome("Test outcome", 17)));
+    public void winAmountTest() {
+        Assert.assertEquals(1800, bet.winAmount());
     }
     
     @Test
-    public void getTest() {
-        
-        Outcome testOutcome = new Outcome("Test outcome", 17);
-        Assert.assertTrue(wheel.add(0, testOutcome));
-        Assert.assertNotNull(wheel.get(0));
-    }
-    
-    @Test
-    public void nextTest() {
-        
-        Assert.assertEquals(wheel.get(seed), wheel.next());
-    }
-    
-    @Test
-    public void getOutcomeTest() {
-        
-        Outcome testOutcome = new Outcome("Test outcome", 17);
-        wheel.add(0, testOutcome);
-        
-        Assert.assertEquals(testOutcome, Wheel.getOutcome("Test outcome"));
+    public void loseAmountTest() {
+        Assert.assertEquals(100, bet.loseAmount());
     }
 }

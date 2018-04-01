@@ -25,56 +25,54 @@
  */
 package us.xwhite.casino;
 
-import java.util.Random;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
 /**
  *
  * @author Joel Crosswhite <joel.crosswhite@ix.netcom.com>
  */
-public class WheelTest {
-    
-    private Wheel wheel;
-    
-    private final int seed = 4;
-    
-    @Before
-    public void setUp() {
-        Random rng = new NonRandom();
-        rng.setSeed(seed);
-        wheel = new Wheel(rng);
+public class Bet {
+
+    private final int amountBet;
+
+    private final Outcome outcome;
+
+    /**
+     * Create a bet with the amount on the outcome
+     *
+     * @param amount Amount to wager
+     * @param outcome Outcome to bet on
+     */
+    public Bet(int amount, Outcome outcome) {
+        this.amountBet = amount;
+        this.outcome = outcome;
     }
-    
-    @Test
-    public void addTest() {
-        
-        Assert.assertTrue(wheel.add(0, new Outcome("Test outcome", 17)));
-        
-        Assert.assertTrue(wheel.add(17, new Outcome("Test outcome", 17)));
+
+    /**
+     * Amount to add to players stake if the bet wins
+     *
+     * @return Amount to add
+     */
+    public int winAmount() {
+        return amountBet + outcome.winAmount(amountBet);
     }
-    
-    @Test
-    public void getTest() {
-        
-        Outcome testOutcome = new Outcome("Test outcome", 17);
-        Assert.assertTrue(wheel.add(0, testOutcome));
-        Assert.assertNotNull(wheel.get(0));
+
+    /**
+     * Amount to reduce players stake by if the bet loses
+     *
+     * @return Amount to remove
+     */
+    public int loseAmount() {
+        return amountBet;
     }
-    
-    @Test
-    public void nextTest() {
-        
-        Assert.assertEquals(wheel.get(seed), wheel.next());
-    }
-    
-    @Test
-    public void getOutcomeTest() {
-        
-        Outcome testOutcome = new Outcome("Test outcome", 17);
-        wheel.add(0, testOutcome);
-        
-        Assert.assertEquals(testOutcome, Wheel.getOutcome("Test outcome"));
+
+    /**
+     * Returns the string representation of this object
+     *
+     * @return a string representation of this object
+     */
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        result.append(amountBet).append(" bet on ").append(outcome.toString());
+        return result.toString();
     }
 }

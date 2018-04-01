@@ -59,6 +59,15 @@ public class Outcome {
     }
 
     /**
+     * Get the name for the outcome
+     *
+     * @return Name of the outcome
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
      * Returns the hash code value for this outcome
      *
      * @return the hash code value for this outcome
