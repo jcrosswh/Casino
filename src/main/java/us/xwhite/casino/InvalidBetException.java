@@ -25,56 +25,10 @@
  */
 package us.xwhite.casino;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mockito;
-
 /**
  *
  * @author Joel Crosswhite <joel.crosswhite@ix.netcom.com>
  */
-public class BetTest {
+public class InvalidBetException extends Exception {
 
-    private Bet bet;
-
-    @Before
-    public void setUp() {
-        bet = new Bet(100, new Outcome("Test outcome", 17), Mockito.mock(Player.class));
-    }
-
-    @Test
-    public void constructorTest() {
-
-        try {
-            Bet bet = new Bet(0, new Outcome("Test outcome", RouletteGame.COLUMN_BET_ODDS), Mockito.mock(Player.class));
-            Assert.fail("Expecting an exception");
-        } catch (IllegalArgumentException iae) {
-            // legitimate exception
-        }
-        
-        try {
-            Bet bet = new Bet(10, null, Mockito.mock(Player.class));
-            Assert.fail("Expecting an exception");
-        } catch (IllegalArgumentException iae) {
-            // legitimate exception
-        }
-        
-        try {
-            Bet bet = new Bet(0, new Outcome("Test outcome", RouletteGame.COLUMN_BET_ODDS), null);
-            Assert.fail("Expecting an exception");
-        } catch (IllegalArgumentException iae) {
-            // legitimate exception
-        }
-    }
-
-    @Test
-    public void winAmountTest() {
-        Assert.assertEquals(1800, bet.winAmount());
-    }
-
-    @Test
-    public void loseAmountTest() {
-        Assert.assertEquals(100, bet.loseAmount());
-    }
 }

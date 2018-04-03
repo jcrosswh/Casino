@@ -25,61 +25,69 @@
  */
 package us.xwhite.casino;
 
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  *
  * @author Joel Crosswhite <joel.crosswhite@ix.netcom.com>
  */
-public class Bet {
+public class Table {
 
-    private final int amountBet;
+    private final int limit;
 
-    private final Outcome outcome;
+    private final List<Bet> bets;
 
-    private final Player player;
+    public Table(int tableLimit) {
+        bets = new LinkedList<>();
+        this.limit = tableLimit;
+    }
 
     /**
-     * Create a bet with the amount on the outcome
+     * Check that the bet being made has not exceeded the table limit
      *
-     * @param amount Amount to wager
-     * @param outcome Outcome to bet on
-     * @param player Player placing the bet
+     * @param bet Bet to check
+     * @return True if the bet would be valid, false otherwise
      */
-    public Bet(int amount, Outcome outcome, Player player) {
+    public boolean isValid(Bet bet) {
 
-        if (amount == 0 || outcome == null || player == null) {
-            throw new IllegalArgumentException("Amount cannot be 0, outcome and player cannot be null");
+        if (bet == null) {
+            return false;
         }
 
-        this.amountBet = amount;
-        this.outcome = outcome;
-        this.player = player;
+        int total = 0;
+        total = bets.stream()
+                .filter((placedBets) -> (bet.getPlayer().equals(placedBets.getPlayer())))
+                .map((placedBets) -> placedBets.loseAmount())
+                .reduce(total, Integer::sum);
+
+        return (total + bet.loseAmount() <= limit);
     }
 
     /**
-     * Amount to add to players stake if the bet wins
+     * Place the bet on the table
      *
-     * @return Amount to add
+     * @param bet Bet to place
+     * @throws InvalidBetException Thrown if bet would exceed table limit or bet
+     * has already been placed
      */
-    public int winAmount() {
-        return amountBet + outcome.winAmount(amountBet);
+    public void placeBet(Bet bet) throws InvalidBetException {
+
+        if (!isValid(bet) || bets.contains(bet)) {
+            throw new InvalidBetException();
+        }
+
+        bets.add(bet);
     }
 
     /**
-     * Amount to reduce players stake by if the bet loses
+     * Get an iterator for the placed bets
      *
-     * @return Amount to remove
+     * @return Iterator for bets
      */
-    public int loseAmount() {
-        return amountBet;
-    }
-
-    /**
-     * Get the player that placed this bet
-     *
-     * @return Player who placed this bet
-     */
-    public Player getPlayer() {
-        return player;
+    public Iterator<Bet> iterator() {
+        return bets.iterator();
     }
 
     /**
@@ -90,7 +98,9 @@ public class Bet {
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
-        result.append("Player ").append(player).append(" bet ").append(amountBet).append(" on ").append(outcome.toString());
+        result.append("Table limit: ").append(limit)
+                .append(", Placed bets: ").append(bets.toString());
         return result.toString();
     }
+
 }
