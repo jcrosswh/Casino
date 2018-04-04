@@ -26,24 +26,92 @@
 package us.xwhite.casino;
 
 /**
+ * Game for playing Roulette. To invoke this game, instantiate the object and
+ * call cycle as many times as wished
  *
  * @author Joel Crosswhite <joel.crosswhite@ix.netcom.com>
  */
 public class RouletteGame {
 
+    /**
+     * Odds for straight bets (35:1)
+     */
     public static int STRAIGHT_BET_ODDS = 35;
 
+    /**
+     * Odds for split bets (17:1)
+     */
     public static int SPLIT_BET_ODDS = 17;
-    
+
+    /**
+     * Odds for street bets (11:1)
+     */
     public static int STREET_BET_ODDS = 11;
-    
+
+    /**
+     * Odds for corner bets (8:1)
+     */
     public static int CORNER_BET_ODDS = 8;
-    
+
+    /**
+     * Odds for line bets (5:1)
+     */
     public static int LINE_BET_ODDS = 5;
-    
+
+    /**
+     * Odds for dozen bets (2:1)
+     */
     public static int DOZEN_BET_ODDS = 2;
-    
+
+    /**
+     * Odds for column bets (2:1)
+     */
     public static int COLUMN_BET_ODDS = 2;
-    
+
+    /**
+     * Odds for even money bets (1:1)
+     */
     public static int EVEN_MONEY_BET_ODDS = 1;
+
+    private final Wheel wheel;
+
+    private final Table table;
+
+    /**
+     * Create a new roulette game
+     *
+     * @param wheel Wheel for the game
+     * @param table Table to place bets on
+     */
+    public RouletteGame(Wheel wheel, Table table) {
+        this.wheel = wheel;
+        this.table = table;
+    }
+
+    /**
+     * Play one cycle of the game. This will take the player, ask the player to
+     * place their bets, spin the wheel and get a winning bin, then notify the
+     * player of all winning and losing bets.
+     *
+     * @param player Player playing the game
+     */
+    public void cycle(Player player) {
+
+        if (player == null) {
+            return;
+        }
+
+        player.placeBets();
+
+        Bin winner = wheel.next();
+
+        for (Bet bet : table) {
+
+            if (winner.contains(bet.getOutcome())) {
+                player.win(bet);
+            } else {
+                player.lose(bet);
+            }
+        }
+    }
 }

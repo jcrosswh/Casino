@@ -25,50 +25,53 @@
  */
 package us.xwhite.casino;
 
+import java.util.Random;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mockito;
+import us.xwhite.casino.util.BinBuilder;
+
 /**
- * Template for all players
  *
  * @author Joel Crosswhite <joel.crosswhite@ix.netcom.com>
  */
-public abstract class Player {
+public class RouletteGameTest {
 
-    private final Table table;
+    private RouletteGame game;
+    private Table table;
+    private Wheel wheel;
 
-    /**
-     * Initialize this player with a table
-     *
-     * @param table Table to associate player to
-     */
-    public Player(Table table) {
-        this.table = table;
+    @Before
+    public void setUp() {
+
+        Random rng = new NonRandom();
+        rng.setSeed(4);
+        wheel = Mockito.spy(new Wheel(rng));
+        BinBuilder.buildBins(wheel);
+
+        table = new Table(1000);
+
+        game = new RouletteGame(wheel, table);
     }
 
-    /**
-     * Inform the player when it is time to place the bets. These bets should be
-     * placed on the table.
-     */
-    public abstract void placeBets();
+    @Test
+    public void cycleTest() throws InvalidBetException {
 
-    /**
-     * Inform the player that the bet has won
-     *
-     * @param bet Winning bet
-     */
-    public abstract void win(Bet bet);
+        Player player = Mockito.mock(Player.class);
 
-    /**
-     * Inform the player that the bet has lost
-     *
-     * @param bet Losing bet
-     */
-    public abstract void lose(Bet bet);
+        // next two lines will be handled by player.placeBets(), once that's implemented
+        Bet bet = new Bet(100, Wheel.getOutcome("Black"), player);
+        table.placeBet(bet);
 
-    /**
-     * Get the table instance
-     *
-     * @return Table instance
-     */
-    protected Table getTable() {
-        return table;
+        game.cycle(player);
+        Mockito.verify(wheel, Mockito.times(1)).next();
+        Mockito.verify(player, Mockito.times(1)).win(Mockito.any(Bet.class));
+    }
+    
+    @Test
+    public void cycleNullPlayerTest() {
+
+        game.cycle(null);        
+        Mockito.verify(wheel, Mockito.times(0)).next();
     }
 }

@@ -26,6 +26,7 @@
 package us.xwhite.casino;
 
 /**
+ * Bet object to contain the amount, outcome, and the player making the bet
  *
  * @author Joel Crosswhite <joel.crosswhite@ix.netcom.com>
  */
@@ -80,6 +81,15 @@ public class Bet {
      */
     public Player getPlayer() {
         return player;
+    }
+
+    /**
+     * Get the outcome for this bet
+     *
+     * @return The outcome
+     */
+    public Outcome getOutcome() {
+        return outcome;
     }
 
     /**

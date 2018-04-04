@@ -30,15 +30,21 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * Table to contain all bets for a spin of the wheel
  *
  * @author Joel Crosswhite <joel.crosswhite@ix.netcom.com>
  */
-public class Table {
+public class Table implements Iterable<Bet> {
 
     private final int limit;
 
     private final List<Bet> bets;
 
+    /**
+     * Create a table with the specified table limit
+     *
+     * @param tableLimit Upper limit for bet amounts that one player may make
+     */
     public Table(int tableLimit) {
         bets = new LinkedList<>();
         this.limit = tableLimit;
@@ -86,6 +92,7 @@ public class Table {
      *
      * @return Iterator for bets
      */
+    @Override
     public Iterator<Bet> iterator() {
         return bets.iterator();
     }
