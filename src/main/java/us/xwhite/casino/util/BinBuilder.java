@@ -42,7 +42,7 @@ import us.xwhite.casino.Wheel;
  */
 public class BinBuilder {
 
-    private final static ResourceBundle BETS;
+    public final static ResourceBundle BETS;
 
     static {
         BETS = ResourceBundle.getBundle("BetNames", Locale.ENGLISH);

@@ -23,86 +23,39 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package us.xwhite.casino;
+package us.xwhite.casino.players.roulette;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import us.xwhite.casino.InvalidBetException;
+import us.xwhite.casino.Player;
+import us.xwhite.casino.Table;
+import us.xwhite.casino.Wheel;
+import us.xwhite.casino.util.BinBuilder;
 
 /**
- * Template for all players
+ * Create a Roulette player who only bets on black
  *
  * @author Joel Crosswhite <joel.crosswhite@ix.netcom.com>
  */
-public abstract class Player {
-
-    private final Table table;
-
-    private long stake;
-
-    private int roundsToGo;
+public class Passenger57 extends Player {
 
     /**
-     * Initialize this player with a table
+     * Create a new Passenger57 player on this table
      *
      * @param table Table to associate player to
      */
-    public Player(Table table) {
-        this.table = table;
-        stake = 1000L;
+    public Passenger57(Table table) {
+        super(table);
     }
 
-    /**
-     * Inform the player when it is time to place the bets. These bets should be
-     * placed on the table.
-     */
-    public abstract void placeBets();
-
-    /**
-     * Inform the player that the bet has won
-     *
-     * @param bet Winning bet
-     */
-    public void win(Bet bet) {
-        this.stake += bet.winAmount();
-    }
-
-    /**
-     * Inform the player that the bet has lost
-     *
-     * @param bet Losing bet
-     */
-    public void lose(Bet bet) {
-        // do nothing for now - later need to track stats
-    }
-
-    /**
-     * Controls when a player leaves a table
-     *
-     * @return True if the player is still at the table, false otherwise
-     */
-    public boolean playing() {
-        return true;
-    }
-
-    /**
-     * Get the players current stake
-     * @return Player's stake
-     */
-    public long getStake() {
-        return stake;
-    }
-    
-    protected void placeBet(int amount, Outcome outcome, Player player) throws InvalidBetException {
-        placeBet(new Bet(amount, outcome, player));
-    }
-    
-    protected void placeBet(Bet bet) throws InvalidBetException {
+    @Override
+    public void placeBets() {
         try {
-            table.placeBet(bet);
-            stake -= bet.loseAmount();
+            placeBet(10, Wheel.getOutcome(BinBuilder.BETS.getString("bet.black")), this);
         } catch (InvalidBetException ex) {
-            Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
-            throw ex;
+            Logger.getLogger(Passenger57.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
 }
