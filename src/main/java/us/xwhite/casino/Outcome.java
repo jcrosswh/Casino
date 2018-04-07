@@ -31,7 +31,7 @@ package us.xwhite.casino;
  *
  * @author Joel Crosswhite <joel.crosswhite@ix.netcom.com>
  */
-public class Outcome {
+public final class Outcome {
 
     private final String name;
 

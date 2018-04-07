@@ -30,7 +30,7 @@ package us.xwhite.casino;
  *
  * @author Joel Crosswhite <joel.crosswhite@ix.netcom.com>
  */
-public class Bet {
+public final class Bet {
 
     private final int amountBet;
 
