@@ -31,4 +31,5 @@ package us.xwhite.casino;
  */
 public class InvalidBetException extends Exception {
 
+    private static final long serialVersionUID = 20180403L;
 }

@@ -112,36 +112,3 @@ public class Wheel {
         return bins.get(bin);
     }
 }
-
-/**
- * Non random rng that should only be used for testing. Create this object, then
- * set the seed value
- *
- * @author Joel Crosswhite <joel.crosswhite@ix.netcom.com>
- */
-class NonRandom extends Random {
-
-    private int value;
-
-    /**
-     * Set the random value that should always be returned
-     *
-     * @param value Value that is always returned
-     * @throws IndexOutOfBoundsException Thrown if value is less than 0 or
-     * greater than {@link Wheel#MAX_BINS}
-     */
-    @Override
-    public void setSeed(long value) {
-
-        if (value < 0 && value >= Wheel.MAX_BINS) {
-            throw new IndexOutOfBoundsException("Seed values must be between 0 and Wheel.MAX_BINS");
-        }
-
-        this.value = (int) value;
-    }
-
-    @Override
-    public int next(int bits) {
-        return value;
-    }
-}

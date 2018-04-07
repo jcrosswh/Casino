@@ -25,72 +25,39 @@
  */
 package us.xwhite.casino;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Random;
 
 /**
- * Class to represent the bin on a roulette wheel
+ * Non random rng that should only be used for testing. Create this object, then
+ * set the seed value
  *
  * @author Joel Crosswhite <joel.crosswhite@ix.netcom.com>
  */
-public class Bin {
+class NonRandom extends Random {
 
-    private final Set<Outcome> outcomes;
+    private static final long serialVersionUID = 20180403L;
 
-    /**
-     * Basic constructor with no outcomes set
-     */
-    public Bin() {
-        this.outcomes = new HashSet<>();
-    }
+    private int value;
 
     /**
-     * Create a bin with outcomes set to array
+     * Set the random value that should always be returned
      *
-     * @param outcomes array of initial outcomes
-     */
-    public Bin(Outcome[] outcomes) {
-        this(Arrays.asList(outcomes));
-    }
-
-    /**
-     * Create a bin with outcomes set to initial collection
-     *
-     * @param outcomes collection of initial outcomes
-     */
-    public Bin(Collection<Outcome> outcomes) {
-        this.outcomes = new HashSet<>(outcomes);
-    }
-
-    /**
-     * Add an outcome to this bin
-     *
-     * @param outcome outcome to add
-     * @return true if this bin did not already contain the outcome
-     */
-    public boolean add(Outcome outcome) {
-        return outcomes.add(outcome);
-    }
-
-    /**
-     * Determine if a given bin contains a particular outcome
-     *
-     * @param outcome outcome to test
-     * @return true if the outcome is contained in this bin, false otherwise
-     */
-    public boolean contains(Outcome outcome) {
-        return outcomes.contains(outcome);
-    }
-
-    /**
-     * Returns the string representation of this object
-     *
-     * @return a string representation of this object
+     * @param value Value that is always returned
+     * @throws IndexOutOfBoundsException Thrown if value is less than 0 or
+     * greater than {@link Wheel#MAX_BINS}
      */
     @Override
-    public String toString() {
-        return outcomes.toString();
+    public void setSeed(long value) {
+
+        if (value < 0 && value >= Wheel.MAX_BINS) {
+            throw new IndexOutOfBoundsException("Seed values must be between 0 and Wheel.MAX_BINS");
+        }
+
+        this.value = (int) value;
+    }
+
+    @Override
+    public int next(int bits) {
+        return value;
     }
 }
