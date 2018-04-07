@@ -36,7 +36,6 @@ import us.xwhite.casino.InvalidBetException;
 import us.xwhite.casino.Player;
 import us.xwhite.casino.Table;
 import us.xwhite.casino.Wheel;
-import us.xwhite.casino.util.BinBuilder;
 
 /**
  *
@@ -51,8 +50,7 @@ public class Passenger57Test {
     @Before
     public void setUp() {
         
-        Wheel wheel = new Wheel(new Random());
-        BinBuilder.buildBins(wheel);
+        new Wheel.WheelBuilder().rng(new Random()).build();
         
         table = Mockito.spy(new Table(1000));
         player = new Passenger57(table);
@@ -67,6 +65,6 @@ public class Passenger57Test {
 
         Mockito.verify(table, Mockito.times(1)).placeBet(betCaptor.capture());
         Bet bet = betCaptor.getValue();
-        Assert.assertEquals(bet.getOutcome(), Wheel.getOutcome(BinBuilder.BETS.getString("bet.black")));
+        Assert.assertEquals(bet.getOutcome(), Wheel.getOutcome(Wheel.BinBuilder.BETS.getString("bet.black")));
     }
 }

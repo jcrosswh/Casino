@@ -31,7 +31,6 @@ import us.xwhite.casino.InvalidBetException;
 import us.xwhite.casino.Player;
 import us.xwhite.casino.Table;
 import us.xwhite.casino.Wheel;
-import us.xwhite.casino.util.BinBuilder;
 
 /**
  * Create a Roulette player who only bets on black
@@ -52,7 +51,7 @@ public class Passenger57 extends Player {
     @Override
     public void placeBets() {
         try {
-            placeBet(10, Wheel.getOutcome(BinBuilder.BETS.getString("bet.black")), this);
+            placeBet(10, Wheel.getOutcome(Wheel.BinBuilder.BETS.getString("bet.black")), this);
         } catch (InvalidBetException ex) {
             Logger.getLogger(Passenger57.class.getName()).log(Level.SEVERE, null, ex);
         }

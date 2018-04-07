@@ -25,7 +25,12 @@
  */
 package us.xwhite.casino.util;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import org.junit.Assert;
@@ -33,6 +38,7 @@ import org.junit.Before;
 import org.junit.Test;
 import us.xwhite.casino.Bin;
 import us.xwhite.casino.Wheel;
+import us.xwhite.casino.Wheel.WheelBuilder;
 
 /**
  *
@@ -43,149 +49,192 @@ public class BinBuilderTest {
     private Wheel wheel;
 
     private Field outcomesField;
+    
+    private Method wheelGetMethod;
+
+    private Map<String, Method> binBuilderMethods;
 
     @Before
-    public void setUp() throws NoSuchFieldException {
-        wheel = new Wheel(new Random());
+    public void setUp() {
+
+        // bypassing the singleton instantiator so we can test creating the bins
+        WheelBuilder builder = new Wheel.WheelBuilder().rng(new Random());
+        for (Constructor wheelConstructor : Wheel.class.getDeclaredConstructors()) {
+            if (wheelConstructor.getParameterCount() == 1 && wheelConstructor.getParameterTypes()[0].equals(WheelBuilder.class)) {
+                wheelConstructor.setAccessible(true);
+                try {
+                    wheel = (Wheel) wheelConstructor.newInstance(builder);
+                } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                    Assert.fail("Not expecting any exceptions");
+                }
+                break;
+            }
+        }
+
+        // allow access to bin builder methods
+        binBuilderMethods = new HashMap<>();
+        try {
+            for (Method method : Class.forName("us.xwhite.casino.Wheel$BinBuilder").getDeclaredMethods()) {
+                method.setAccessible(true);
+                binBuilderMethods.put(method.getName(), method);
+            }
+        } catch (ClassNotFoundException ex) {
+            Assert.fail("Could not find Wheel.BinBuilder class");
+        }
 
         // using reflection to inspect the container - need more detailed
         // information than I'm willing to expose through the containing object
-        outcomesField = Bin.class.getDeclaredField("outcomes");
+        try {
+            outcomesField = Bin.class.getDeclaredField("outcomes");
+        } catch (NoSuchFieldException | SecurityException ex) {
+            Assert.fail("Not expecting any exceptions");
+        }
         outcomesField.setAccessible(true);
+        
+        try {
+            for (Method method : Class.forName("us.xwhite.casino.Wheel").getDeclaredMethods()) {
+                if (method.getName().equals("get")) {
+                    method.setAccessible(true);
+                    wheelGetMethod = method;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            Assert.fail("Could not find Wheel.get method");
+        }
     }
 
     @Test
-    public void buildBinsTest() throws IllegalAccessException {
+    public void buildBinsTest() throws IllegalAccessException, InvocationTargetException {
         try {
-            BinBuilder.buildBins(wheel);
-        } catch (Exception e) {
+            binBuilderMethods.get("buildBins").invoke(this, wheel);
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             Assert.fail("Not expecting any exceptions");
         }
 
-        Assert.assertEquals(1, ((Set) outcomesField.get(wheel.get(0))).size());
-        Assert.assertEquals(11, ((Set) outcomesField.get(wheel.get(1))).size());
-        Assert.assertEquals(17, ((Set) outcomesField.get(wheel.get(17))).size());
-        Assert.assertEquals(11, ((Set) outcomesField.get(wheel.get(36))).size());
-        Assert.assertEquals(1, ((Set) outcomesField.get(wheel.get(37))).size());
+        Assert.assertEquals(1, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 0))).size());
+        Assert.assertEquals(11, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 1))).size());
+        Assert.assertEquals(17, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 17))).size());
+        Assert.assertEquals(11, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 36))).size());
+        Assert.assertEquals(1, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 37))).size());
     }
 
     @Test
-    public void generateStraightBetsTest() throws IllegalAccessException {
+    public void generateStraightBetsTest() throws IllegalAccessException, InvocationTargetException {
         try {
-            BinBuilder.generateStraightBets(wheel);
-        } catch (Exception e) {
+            binBuilderMethods.get("generateStraightBets").invoke(this, wheel);
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             Assert.fail("Not expecting any exceptions");
         }
 
-        Assert.assertEquals(1, ((Set) outcomesField.get(wheel.get(0))).size());
-        Assert.assertEquals(1, ((Set) outcomesField.get(wheel.get(1))).size());
-        Assert.assertEquals(1, ((Set) outcomesField.get(wheel.get(17))).size());
-        Assert.assertEquals(1, ((Set) outcomesField.get(wheel.get(36))).size());
-        Assert.assertEquals(1, ((Set) outcomesField.get(wheel.get(37))).size());
+        Assert.assertEquals(1, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 0))).size());
+        Assert.assertEquals(1, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 1))).size());
+        Assert.assertEquals(1, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 17))).size());
+        Assert.assertEquals(1, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 36))).size());
+        Assert.assertEquals(1, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 37))).size());
     }
 
     @Test
-    public void generateSplitBetsTest() throws IllegalAccessException {
+    public void generateSplitBetsTest() throws IllegalAccessException, InvocationTargetException {
         try {
-            BinBuilder.generateSplitBets(wheel);
-        } catch (Exception e) {
+            binBuilderMethods.get("generateSplitBets").invoke(this, wheel);
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             Assert.fail("Not expecting any exceptions");
         }
 
-        Assert.assertEquals(0, ((Set) outcomesField.get(wheel.get(0))).size());
-        Assert.assertEquals(2, ((Set) outcomesField.get(wheel.get(1))).size());
-        Assert.assertEquals(4, ((Set) outcomesField.get(wheel.get(17))).size());
-        Assert.assertEquals(2, ((Set) outcomesField.get(wheel.get(36))).size());
-        Assert.assertEquals(0, ((Set) outcomesField.get(wheel.get(37))).size());
+        Assert.assertEquals(0, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 0))).size());
+        Assert.assertEquals(2, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 1))).size());
+        Assert.assertEquals(4, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 17))).size());
+        Assert.assertEquals(2, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 36))).size());
+        Assert.assertEquals(0, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 37))).size());
     }
 
     @Test
-    public void generateStreetBetsTest() throws IllegalAccessException {
+    public void generateStreetBetsTest() throws IllegalAccessException, InvocationTargetException {
         try {
-            BinBuilder.generateStreetBets(wheel);
-        } catch (Exception e) {
+            binBuilderMethods.get("generateStreetBets").invoke(this, wheel);
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             Assert.fail("Not expecting any exceptions");
         }
 
-        Assert.assertEquals(0, ((Set) outcomesField.get(wheel.get(0))).size());
-        Assert.assertEquals(1, ((Set) outcomesField.get(wheel.get(1))).size());
-        Assert.assertEquals(1, ((Set) outcomesField.get(wheel.get(17))).size());
-        Assert.assertEquals(1, ((Set) outcomesField.get(wheel.get(36))).size());
-        Assert.assertEquals(0, ((Set) outcomesField.get(wheel.get(37))).size());
+        Assert.assertEquals(0, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 0))).size());
+        Assert.assertEquals(1, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 1))).size());
+        Assert.assertEquals(1, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 17))).size());
+        Assert.assertEquals(1, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 36))).size());
+        Assert.assertEquals(0, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 37))).size());
     }
 
     @Test
-    public void generateConerBetsTest() throws IllegalAccessException {
+    public void generateConerBetsTest() throws IllegalAccessException, InvocationTargetException {
         try {
-            BinBuilder.generateConerBets(wheel);
-        } catch (Exception e) {
+            binBuilderMethods.get("generateConerBets").invoke(this, wheel);
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             Assert.fail("Not expecting any exceptions");
         }
 
-        Assert.assertEquals(0, ((Set) outcomesField.get(wheel.get(0))).size());
-        Assert.assertEquals(1, ((Set) outcomesField.get(wheel.get(1))).size());
-        Assert.assertEquals(4, ((Set) outcomesField.get(wheel.get(17))).size());
-        Assert.assertEquals(1, ((Set) outcomesField.get(wheel.get(36))).size());
-        Assert.assertEquals(0, ((Set) outcomesField.get(wheel.get(37))).size());
+        Assert.assertEquals(0, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 0))).size());
+        Assert.assertEquals(1, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 1))).size());
+        Assert.assertEquals(4, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 17))).size());
+        Assert.assertEquals(1, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 36))).size());
+        Assert.assertEquals(0, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 37))).size());
     }
 
     @Test
-    public void generateLineBetsTest() throws IllegalAccessException {
+    public void generateLineBetsTest() throws IllegalAccessException, InvocationTargetException {
         try {
-            BinBuilder.generateLineBets(wheel);
-        } catch (Exception e) {
+            binBuilderMethods.get("generateLineBets").invoke(this, wheel);
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             Assert.fail("Not expecting any exceptions");
         }
 
-        Assert.assertEquals(0, ((Set) outcomesField.get(wheel.get(0))).size());
-        Assert.assertEquals(1, ((Set) outcomesField.get(wheel.get(1))).size());
-        Assert.assertEquals(2, ((Set) outcomesField.get(wheel.get(17))).size());
-        Assert.assertEquals(1, ((Set) outcomesField.get(wheel.get(36))).size());
-        Assert.assertEquals(0, ((Set) outcomesField.get(wheel.get(37))).size());
+        Assert.assertEquals(0, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 0))).size());
+        Assert.assertEquals(1, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 1))).size());
+        Assert.assertEquals(2, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 17))).size());
+        Assert.assertEquals(1, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 36))).size());
+        Assert.assertEquals(0, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 37))).size());
     }
 
     @Test
-    public void generateDozenBetsTest() throws IllegalAccessException {
+    public void generateDozenBetsTest() throws IllegalAccessException, InvocationTargetException {
         try {
-            BinBuilder.generateDozenBets(wheel);
-        } catch (Exception e) {
+            binBuilderMethods.get("generateDozenBets").invoke(this, wheel);
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             Assert.fail("Not expecting any exceptions");
         }
 
-        Assert.assertEquals(0, ((Set) outcomesField.get(wheel.get(0))).size());
-        Assert.assertEquals(1, ((Set) outcomesField.get(wheel.get(1))).size());
-        Assert.assertEquals(1, ((Set) outcomesField.get(wheel.get(17))).size());
-        Assert.assertEquals(1, ((Set) outcomesField.get(wheel.get(36))).size());
-        Assert.assertEquals(0, ((Set) outcomesField.get(wheel.get(37))).size());
+        Assert.assertEquals(0, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 0))).size());
+        Assert.assertEquals(1, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 1))).size());
+        Assert.assertEquals(1, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 17))).size());
+        Assert.assertEquals(1, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 36))).size());
+        Assert.assertEquals(0, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 37))).size());
     }
 
     @Test
-    public void generateColumnBetsTest() throws IllegalAccessException {
+    public void generateColumnBetsTest() throws IllegalAccessException, InvocationTargetException {
         try {
-            BinBuilder.generateColumnBets(wheel);
-        } catch (Exception e) {
+            binBuilderMethods.get("generateColumnBets").invoke(this, wheel);
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             Assert.fail("Not expecting any exceptions");
         }
 
-        Assert.assertEquals(0, ((Set) outcomesField.get(wheel.get(0))).size());
-        Assert.assertEquals(1, ((Set) outcomesField.get(wheel.get(1))).size());
-        Assert.assertEquals(1, ((Set) outcomesField.get(wheel.get(17))).size());
-        Assert.assertEquals(1, ((Set) outcomesField.get(wheel.get(36))).size());
-        Assert.assertEquals(0, ((Set) outcomesField.get(wheel.get(37))).size());
+        Assert.assertEquals(0, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 0))).size());
+        Assert.assertEquals(1, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 1))).size());
+        Assert.assertEquals(1, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 17))).size());
+        Assert.assertEquals(1, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 36))).size());
+        Assert.assertEquals(0, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 37))).size());
     }
 
     @Test
-    public void generateEvenMoneyBetsTest() throws IllegalAccessException {
+    public void generateEvenMoneyBetsTest() throws IllegalAccessException, InvocationTargetException {
         try {
-            BinBuilder.generateEvenMoneyBets(wheel);
-        } catch (Exception e) {
+            binBuilderMethods.get("generateEvenMoneyBets").invoke(this, wheel);
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             Assert.fail("Not expecting any exceptions");
         }
 
-        Assert.assertEquals(0, ((Set) outcomesField.get(wheel.get(0))).size());
-        Assert.assertEquals(3, ((Set) outcomesField.get(wheel.get(1))).size());
-        Assert.assertEquals(3, ((Set) outcomesField.get(wheel.get(17))).size());
-        Assert.assertEquals(3, ((Set) outcomesField.get(wheel.get(36))).size());
-        Assert.assertEquals(0, ((Set) outcomesField.get(wheel.get(37))).size());
+        Assert.assertEquals(0, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 0))).size());
+        Assert.assertEquals(3, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 1))).size());
+        Assert.assertEquals(3, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 17))).size());
+        Assert.assertEquals(3, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 36))).size());
+        Assert.assertEquals(0, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 37))).size());
     }
 }

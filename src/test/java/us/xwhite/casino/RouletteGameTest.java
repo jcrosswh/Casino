@@ -29,7 +29,7 @@ import java.util.Random;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-import us.xwhite.casino.util.BinBuilder;
+import us.xwhite.casino.Wheel.WheelBuilder;
 
 /**
  *
@@ -40,14 +40,13 @@ public class RouletteGameTest {
     private RouletteGame game;
     private Table table;
     private Wheel wheel;
-
+    
     @Before
     public void setUp() {
 
         Random rng = new NonRandom();
         rng.setSeed(4);
-        wheel = Mockito.spy(new Wheel(rng));
-        BinBuilder.buildBins(wheel);
+        wheel = Mockito.spy(new WheelBuilder().rng(rng).build());
 
         table = new Table(1000);
 

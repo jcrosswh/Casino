@@ -29,52 +29,69 @@ import java.util.Random;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import us.xwhite.casino.Wheel.WheelBuilder;
 
 /**
  *
  * @author Joel Crosswhite <joel.crosswhite@ix.netcom.com>
  */
 public class WheelTest {
-    
+
     private Wheel wheel;
-    
+
     private final int seed = 4;
-    
+
     @Before
     public void setUp() {
         Random rng = new NonRandom();
         rng.setSeed(seed);
-        wheel = new Wheel(rng);
+        wheel = new Wheel.WheelBuilder().rng(rng).build();
     }
-    
-    @Test
-    public void addTest() {
-        
-        Assert.assertTrue(wheel.add(0, new Outcome("Test outcome", 17)));
-        
-        Assert.assertTrue(wheel.add(17, new Outcome("Test outcome", 17)));
-    }
-    
-    @Test
-    public void getTest() {
-        
-        Outcome testOutcome = new Outcome("Test outcome", 17);
-        Assert.assertTrue(wheel.add(0, testOutcome));
-        Assert.assertNotNull(wheel.get(0));
-    }
-    
+
     @Test
     public void nextTest() {
-        
-        Assert.assertEquals(wheel.get(seed), wheel.next());
+
+        Assert.assertTrue(wheel.next().contains(Wheel.getOutcome(Integer.toString(seed))));
     }
-    
+
     @Test
     public void getOutcomeTest() {
-        
-        Outcome testOutcome = new Outcome("Test outcome", 17);
-        wheel.add(0, testOutcome);
-        
-        Assert.assertEquals(testOutcome, Wheel.getOutcome("Test outcome"));
+
+        Assert.assertNotNull(Wheel.getOutcome("0"));
+
+        try {
+            Wheel.getOutcome("Illegal outcome");
+            Assert.fail("Expecting an exception");
+        } catch (IllegalArgumentException iae) {
+            // do nothing, expecting an exception
+        }
+    }
+
+    @Test
+    public void createNewWheelTest() {
+
+        WheelBuilder builder = new Wheel.WheelBuilder();
+
+        Assert.assertNotNull(builder.rng(new Random()).build());
+    }
+
+    @Test
+    public void createNewWheelExceptionTest() {
+
+        WheelBuilder builder = new Wheel.WheelBuilder();
+
+        try {
+            builder.build();
+            Assert.fail("Expecting to get an exception");
+        } catch (IllegalArgumentException iae) {
+            // do nothing, expecting an exception
+        }
+
+        try {
+            builder.rng(null).build();
+            Assert.fail("Expecting to get an exception");
+        } catch (IllegalArgumentException iae) {
+            // do nothing, expecting an exception
+        }
     }
 }
