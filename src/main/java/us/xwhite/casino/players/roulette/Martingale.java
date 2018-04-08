@@ -27,31 +27,44 @@ package us.xwhite.casino.players.roulette;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import us.xwhite.casino.Bet;
 import us.xwhite.casino.InvalidBetException;
 import us.xwhite.casino.Player;
 import us.xwhite.casino.Table;
 import us.xwhite.casino.Wheel;
 
 /**
- * Create a Roulette player who only bets on black
  *
  * @author Joel Crosswhite <joel.crosswhite@ix.netcom.com>
  */
-public final class Passenger57 extends Player {
+public final class Martingale extends Player {
 
-    /**
-     * Create a new Passenger57 player on this table
-     *
-     * @param table Table to associate player to
-     */
-    public Passenger57(Table table) {
+    private int loseCount;
+
+    public Martingale(Table table) {
         super(table);
+        loseCount = 0;
+    }
+
+    @Override
+    public void win(Bet bet) {
+        super.win(bet);
+        loseCount = 0;
+    }
+
+    @Override
+    public void lose(Bet bet) {
+        loseCount++;
+    }
+
+    private int getBetMultiple() {
+        return (int) Math.pow(2.0, loseCount);
     }
 
     @Override
     public void placeBets() {
         try {
-            placeBet(10, Wheel.getOutcome(Wheel.BinBuilder.BETS.getString("bet.black")), this);
+            placeBet(10 * getBetMultiple(), Wheel.getOutcome(Wheel.BinBuilder.BETS.getString("bet.black")), this);
         } catch (InvalidBetException ex) {
             Logger.getLogger(Passenger57.class.getName()).log(Level.SEVERE, null, ex);
         }
