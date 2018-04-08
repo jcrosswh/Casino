@@ -34,6 +34,7 @@ import org.mockito.Mockito;
 import us.xwhite.casino.Bet;
 import us.xwhite.casino.InvalidBetException;
 import us.xwhite.casino.Player;
+import us.xwhite.casino.Simulator;
 import us.xwhite.casino.Table;
 import us.xwhite.casino.Wheel;
 
@@ -53,7 +54,7 @@ public class Passenger57Test {
         new Wheel.WheelBuilder().rng(new Random()).build();
         
         table = Mockito.spy(new Table(1000));
-        player = new Passenger57(table);
+        player = new Passenger57(table, Simulator.INIT_STAKE, Simulator.INIT_DURATION);
     }
     
     @Test

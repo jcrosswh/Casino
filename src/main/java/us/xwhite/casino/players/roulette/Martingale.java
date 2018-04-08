@@ -34,6 +34,11 @@ import us.xwhite.casino.Table;
 import us.xwhite.casino.Wheel;
 
 /**
+ * Create a Roulette player who only bets on black and uses the Martingale
+ * betting strategy. Using this betting strategy, this player will bet their
+ * normal betting units whenever they are winning. On a loss, they will double
+ * their betting units, and continue to do so until they either reach the table
+ * maximum, or they win.
  *
  * @author Joel Crosswhite <joel.crosswhite@ix.netcom.com>
  */
@@ -41,8 +46,16 @@ public final class Martingale extends Player {
 
     private int loseCount;
 
-    public Martingale(Table table) {
-        super(table);
+    /**
+     * Create a new Martingale player on this table
+     *
+     * @param table
+     * @param stake Player's starting stake in betting units
+     * @param roundsToGo Player's starting number of rounds they are willing to
+     * play
+     */
+    public Martingale(Table table, int stake, int roundsToGo) {
+        super(table, stake, roundsToGo);
         loseCount = 0;
     }
 
@@ -64,9 +77,14 @@ public final class Martingale extends Player {
     @Override
     public void placeBets() {
         try {
-            placeBet(10 * getBetMultiple(), Wheel.getOutcome(Wheel.BinBuilder.BETS.getString("bet.black")), this);
+            placeBet(getBetMultiple(), Wheel.getOutcome(Wheel.BinBuilder.BETS.getString("bet.black")), this);
         } catch (InvalidBetException ex) {
-            Logger.getLogger(Passenger57.class.getName()).log(Level.SEVERE, null, ex);
+            loseCount--;
+            try {
+                placeBet(getBetMultiple(), Wheel.getOutcome(Wheel.BinBuilder.BETS.getString("bet.black")), this);
+            } catch (InvalidBetException ex1) {
+                Logger.getLogger(Martingale.class.getName()).log(Level.SEVERE, null, ex1);
+            }
         }
     }
 

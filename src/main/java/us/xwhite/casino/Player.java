@@ -37,7 +37,7 @@ public abstract class Player {
 
     private final Table table;
 
-    private long stake;
+    private int stake;
 
     private int roundsToGo;
 
@@ -45,10 +45,14 @@ public abstract class Player {
      * Initialize this player with a table
      *
      * @param table Table to associate player to
+     * @param stake Player's starting stake in betting units
+     * @param roundsToGo Player's starting number of rounds they are willing to
+     * play
      */
-    public Player(Table table) {
+    public Player(Table table, int stake, int roundsToGo) {
         this.table = table;
-        stake = 1000L;
+        this.stake = stake;
+        this.roundsToGo = roundsToGo;
     }
 
     /**
@@ -63,7 +67,8 @@ public abstract class Player {
      * @param bet Winning bet
      */
     public void win(Bet bet) {
-        this.stake += bet.winAmount();
+        stake += bet.winAmount();
+        roundsToGo--;
     }
 
     /**
@@ -72,7 +77,7 @@ public abstract class Player {
      * @param bet Losing bet
      */
     public void lose(Bet bet) {
-        // do nothing for now - later need to track stats
+        roundsToGo--;
     }
 
     /**
@@ -81,21 +86,22 @@ public abstract class Player {
      * @return True if the player is still at the table, false otherwise
      */
     public boolean playing() {
-        return true;
+        return (stake > 0 && roundsToGo > 0);
     }
 
     /**
      * Get the players current stake
+     *
      * @return Player's stake
      */
-    public long getStake() {
+    public int getStake() {
         return stake;
     }
-    
+
     protected void placeBet(int amount, Outcome outcome, Player player) throws InvalidBetException {
         placeBet(new Bet(amount, outcome, player));
     }
-    
+
     protected void placeBet(Bet bet) throws InvalidBetException {
         try {
             table.placeBet(bet);

@@ -31,7 +31,7 @@ package us.xwhite.casino;
  *
  * @author Joel Crosswhite <joel.crosswhite@ix.netcom.com>
  */
-public class RouletteGame {
+public class RouletteGame implements Game {
 
     /**
      * Odds for straight bets (35:1)
@@ -95,6 +95,7 @@ public class RouletteGame {
      *
      * @param player Player playing the game
      */
+    @Override
     public void cycle(Player player) {
 
         if (player == null || !player.playing()) {
@@ -113,5 +114,7 @@ public class RouletteGame {
                 player.lose(bet);
             }
         }
+        
+        table.clearBets();
     }
 }

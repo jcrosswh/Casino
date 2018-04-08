@@ -25,55 +25,19 @@
  */
 package us.xwhite.casino;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
 /**
+ * Interface to all casino games
  *
  * @author Joel Crosswhite <joel.crosswhite@ix.netcom.com>
  */
-public class PlayerTest {
-    
-    private Player player;
-    
-    @Before
-    public void setUp() {
-        player = new TestPlayer(new Table(1000), Simulator.INIT_STAKE, Simulator.INIT_DURATION);
-    }
-    
-    @Test
-    public void winTest() throws InvalidBetException {
-        
-        Bet bet = new Bet(1, new Outcome("Test outcome", 1), player);
-        player.placeBet(bet);
-        player.win(bet);
-        Assert.assertEquals(Simulator.INIT_STAKE + 1, player.getStake());
-    }
-    
-    @Test
-    public void loseTest() throws InvalidBetException {
-        
-        Bet bet = new Bet(1, new Outcome("Test outcome", 1), player);
-        player.placeBet(bet);
-        player.lose(bet);
-        Assert.assertEquals(Simulator.INIT_STAKE - 1, player.getStake());
-    }
-    
-    @Test
-    public void playingTest() {
-        Assert.assertTrue(player.playing());
-    }
-}
+public interface Game {
 
-class TestPlayer extends Player {
-    
-    public TestPlayer(Table table, int stake, int roundsToGo) {
-        super(table, stake, roundsToGo);
-    }
-
-    @Override
-    public void placeBets() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    /**
+     * Play one cycle of the game. This will take the player, ask the player to
+     * place their bets, play a round of the game, then notify the player of all
+     * winning and losing bets.
+     *
+     * @param player Player playing the game
+     */
+    public void cycle(Player player);
 }

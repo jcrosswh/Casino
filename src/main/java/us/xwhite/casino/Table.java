@@ -86,6 +86,13 @@ public class Table implements Iterable<Bet> {
 
         bets.add(bet);
     }
+    
+    /**
+     * Remove all bets from the table
+     */
+    public void clearBets() {
+        bets.clear();
+    }
 
     /**
      * Get an iterator for the placed bets

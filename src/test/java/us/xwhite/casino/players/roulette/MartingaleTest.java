@@ -34,6 +34,7 @@ import org.mockito.Mockito;
 import us.xwhite.casino.Bet;
 import us.xwhite.casino.InvalidBetException;
 import us.xwhite.casino.Player;
+import us.xwhite.casino.Simulator;
 import us.xwhite.casino.Table;
 import us.xwhite.casino.Wheel;
 
@@ -53,7 +54,7 @@ public class MartingaleTest {
         new Wheel.WheelBuilder().rng(new Random()).build();
         
         table = Mockito.spy(new Table(1000));
-        player = new Martingale(table);
+        player = new Martingale(table, Simulator.INIT_STAKE, Simulator.INIT_DURATION);
     }
     
     @Test
@@ -66,7 +67,7 @@ public class MartingaleTest {
         Mockito.verify(table, Mockito.times(1)).placeBet(betCaptor.capture());
         Bet bet = betCaptor.getValue();
         Assert.assertEquals(bet.getOutcome(), Wheel.getOutcome(Wheel.BinBuilder.BETS.getString("bet.black")));
-        Assert.assertEquals(10, bet.loseAmount());
+        Assert.assertEquals(1, bet.loseAmount());
     }
     
     @Test
@@ -78,19 +79,19 @@ public class MartingaleTest {
 
         Mockito.verify(table, Mockito.times(1)).placeBet(betCaptor.capture());
         Bet bet = betCaptor.getValue();
-        Assert.assertEquals(10, bet.loseAmount());
+        Assert.assertEquals(1, bet.loseAmount());
         
         player.lose(bet);
         player.placeBets();
         Mockito.verify(table, Mockito.times(2)).placeBet(betCaptor.capture());
         bet = betCaptor.getValue();
-        Assert.assertEquals(20, bet.loseAmount());
+        Assert.assertEquals(2, bet.loseAmount());
         
         player.win(bet);
         player.placeBets();
         Mockito.verify(table, Mockito.times(3)).placeBet(betCaptor.capture());
         bet = betCaptor.getValue();
-        Assert.assertEquals(10, bet.loseAmount());
+        Assert.assertEquals(1, bet.loseAmount());
     }
     
     @Test
@@ -102,18 +103,18 @@ public class MartingaleTest {
 
         Mockito.verify(table, Mockito.times(1)).placeBet(betCaptor.capture());
         Bet bet = betCaptor.getValue();
-        Assert.assertEquals(10, bet.loseAmount());
+        Assert.assertEquals(1, bet.loseAmount());
         
         player.lose(bet);
         player.placeBets();
         Mockito.verify(table, Mockito.times(2)).placeBet(betCaptor.capture());
         bet = betCaptor.getValue();
-        Assert.assertEquals(20, bet.loseAmount());
+        Assert.assertEquals(2, bet.loseAmount());
         
         player.lose(bet);
         player.placeBets();
         Mockito.verify(table, Mockito.times(3)).placeBet(betCaptor.capture());
         bet = betCaptor.getValue();
-        Assert.assertEquals(40, bet.loseAmount());
+        Assert.assertEquals(4, bet.loseAmount());
     }
 }

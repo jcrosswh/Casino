@@ -43,15 +43,18 @@ public final class Passenger57 extends Player {
      * Create a new Passenger57 player on this table
      *
      * @param table Table to associate player to
+     * @param stake Player's starting stake in betting units
+     * @param roundsToGo Player's starting number of rounds they are willing to
+     * play
      */
-    public Passenger57(Table table) {
-        super(table);
+    public Passenger57(Table table, int stake, int roundsToGo) {
+        super(table, stake, roundsToGo);
     }
 
     @Override
     public void placeBets() {
         try {
-            placeBet(10, Wheel.getOutcome(Wheel.BinBuilder.BETS.getString("bet.black")), this);
+            placeBet(1, Wheel.getOutcome(Wheel.BinBuilder.BETS.getString("bet.black")), this);
         } catch (InvalidBetException ex) {
             Logger.getLogger(Passenger57.class.getName()).log(Level.SEVERE, null, ex);
         }
