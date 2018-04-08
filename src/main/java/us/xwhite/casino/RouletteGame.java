@@ -97,7 +97,7 @@ public class RouletteGame {
      */
     public void cycle(Player player) {
 
-        if (player == null) {
+        if (player == null || !player.playing()) {
             return;
         }
 

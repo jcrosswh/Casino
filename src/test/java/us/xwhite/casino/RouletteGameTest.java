@@ -40,7 +40,7 @@ public class RouletteGameTest {
     private RouletteGame game;
     private Table table;
     private Wheel wheel;
-    
+
     @Before
     public void setUp() {
 
@@ -57,8 +57,9 @@ public class RouletteGameTest {
     public void cycleTest() throws InvalidBetException {
 
         Player player = Mockito.mock(Player.class);
+        Mockito.when(player.playing()).thenReturn(true);
 
-        // next two lines will be handled by player.placeBets(), once that's implemented
+        // next two lines will be handled by player.placeBets()
         Bet bet = new Bet(100, Wheel.getOutcome("Black"), player);
         table.placeBet(bet);
 
@@ -66,11 +67,22 @@ public class RouletteGameTest {
         Mockito.verify(wheel, Mockito.times(1)).next();
         Mockito.verify(player, Mockito.times(1)).win(Mockito.any(Bet.class));
     }
-    
+
     @Test
     public void cycleNullPlayerTest() {
 
-        game.cycle(null);        
+        game.cycle(null);
+        Mockito.verify(wheel, Mockito.times(0)).next();
+    }
+
+    @Test
+    public void cyclePlayerNotPlayingTest() {
+
+        Player player = Mockito.mock(Player.class);
+
+        Mockito.when(player.playing()).thenReturn(false);
+
+        game.cycle(player);
         Mockito.verify(wheel, Mockito.times(0)).next();
     }
 }
