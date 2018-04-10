@@ -45,6 +45,8 @@ import us.xwhite.casino.Wheel;
 public final class Martingale extends Player {
 
     private int loseCount;
+    
+    private boolean donePlaying;
 
     /**
      * Create a new Martingale player on this table
@@ -57,6 +59,7 @@ public final class Martingale extends Player {
     public Martingale(Table table, int stake, int roundsToGo) {
         super(table, stake, roundsToGo);
         loseCount = 0;
+        donePlaying = false;
     }
 
     @Override
@@ -69,9 +72,19 @@ public final class Martingale extends Player {
     public void lose(Bet bet) {
         loseCount++;
     }
+    
+    @Override
+    public boolean playing() {
+        
+        if (donePlaying) {
+            return false;
+        }
+        
+        return super.playing();
+    }
 
     private int getBetMultiple() {
-        return (int) Math.pow(2.0, loseCount);
+        return Math.min((int) Math.pow(2.0, loseCount), getStake());
     }
 
     @Override
@@ -83,7 +96,7 @@ public final class Martingale extends Player {
             try {
                 placeBet(getBetMultiple(), Wheel.getOutcome(Wheel.BinBuilder.BETS.getString("bet.black")), this);
             } catch (InvalidBetException ex1) {
-                Logger.getLogger(Martingale.class.getName()).log(Level.SEVERE, null, ex1);
+                donePlaying = true;
             }
         }
     }

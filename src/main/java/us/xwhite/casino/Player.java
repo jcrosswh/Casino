@@ -27,6 +27,8 @@ package us.xwhite.casino;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import us.xwhite.casino.players.roulette.Martingale;
+import us.xwhite.casino.players.roulette.Passenger57;
 
 /**
  * Template for all players
@@ -68,7 +70,6 @@ public abstract class Player {
      */
     public void win(Bet bet) {
         stake += bet.winAmount();
-        roundsToGo--;
     }
 
     /**
@@ -77,7 +78,7 @@ public abstract class Player {
      * @param bet Losing bet
      */
     public void lose(Bet bet) {
-        roundsToGo--;
+        // do nothing for now
     }
 
     /**
@@ -102,13 +103,118 @@ public abstract class Player {
         placeBet(new Bet(amount, outcome, player));
     }
 
-    protected void placeBet(Bet bet) throws InvalidBetException {
+    private void placeBet(Bet bet) throws InvalidBetException {
         try {
             table.placeBet(bet);
             stake -= bet.loseAmount();
+            roundsToGo--;
         } catch (InvalidBetException ex) {
-            Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Player.class.getName()).log(Level.FINE, null, ex);
             throw ex;
         }
+    }
+
+    /**
+     * Builder used to create a new player
+     */
+    public static class PlayerBuilder {
+
+        private Table table;
+
+        private int stake;
+
+        private int roundsToGo;
+
+        private Player.Type type;
+
+        private boolean isStakeSet;
+
+        private boolean isRoundsToGoSet;
+
+        /**
+         * Get a new instance of the builder
+         */
+        public PlayerBuilder() {
+            isStakeSet = false;
+            isRoundsToGoSet = false;
+        }
+
+        /**
+         * Set the table that the player will play at
+         *
+         * @param table Table to play at
+         * @return Instance of PlayerBuilder
+         */
+        public PlayerBuilder table(Table table) {
+            this.table = table;
+            return this;
+        }
+
+        /**
+         * Set the initial stake for the player
+         *
+         * @param stake Initial stake of the player
+         * @return Instance of PlayerBuilder
+         */
+        public PlayerBuilder stake(int stake) {
+            this.stake = stake;
+            isStakeSet = true;
+            return this;
+        }
+
+        /**
+         * Set the number of rounds a player will play
+         *
+         * @param roundsToGo Maximum number of rounds the player will play
+         * @return Instance of PlayerBuilder
+         */
+        public PlayerBuilder roundsToGo(int roundsToGo) {
+            this.roundsToGo = roundsToGo;
+            isRoundsToGoSet = true;
+            return this;
+        }
+
+        /**
+         * Set the type of the player wanted
+         *
+         * @param type Type of the player wanted
+         * @return Instance of PlayerBuilder
+         */
+        public PlayerBuilder type(Player.Type type) {
+            this.type = type;
+            return this;
+        }
+
+        /**
+         * Create an instance of the player
+         *
+         * @return New instance of player
+         * @throws IllegalArgumentException Thrown if a required value is not
+         * set
+         */
+        public Player build() {
+
+            if (table == null || !isStakeSet || !isRoundsToGoSet || type == null) {
+                throw new IllegalArgumentException("Please set required values first");
+            }
+
+            switch (type) {
+                case Martingale:
+                    return new Martingale(table, Simulator.INIT_STAKE, Simulator.INIT_DURATION);
+                case Passenger57:
+                    return new Passenger57(table, Simulator.INIT_STAKE, Simulator.INIT_DURATION);
+                default:
+                    break;
+            }
+            return null;
+        }
+    }
+
+    /**
+     * Different types of players that are allowed
+     */
+    public enum Type {
+        Passenger57,
+        Martingale
     }
 }

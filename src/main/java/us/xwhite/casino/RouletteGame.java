@@ -117,4 +117,9 @@ public class RouletteGame implements Game {
         
         table.clearBets();
     }
+    
+    @Override
+    public Table getTable() {
+        return table;
+    }
 }

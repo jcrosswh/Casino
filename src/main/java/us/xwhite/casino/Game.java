@@ -40,4 +40,11 @@ public interface Game {
      * @param player Player playing the game
      */
     public void cycle(Player player);
+
+    /**
+     * Retrieve the table for this game
+     *
+     * @return The table this game has set
+     */
+    public Table getTable();
 }

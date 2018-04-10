@@ -54,9 +54,17 @@ public class Simulator {
 
     private final List<Integer> durations;
 
+    private int totalDurations;
+
     private final List<Integer> maxima;
 
-    private final Player player;
+    private int totalMaxima;
+
+    private final List<Integer> finalStakes;
+
+    private int totalFinalStakes;
+
+    private final Player.Type playerType;
 
     private final Game game;
 
@@ -66,27 +74,40 @@ public class Simulator {
      * @param game Game for player to play
      * @param player Betting strategy player
      */
-    public Simulator(Game game, Player player) {
-        this.player = player;
+    public Simulator(Game game, Player.Type player) {
+        this.playerType = player;
         this.game = game;
 
         durations = new LinkedList<>();
+        totalDurations = 0;
         maxima = new LinkedList<>();
+        totalMaxima = 0;
+        finalStakes = new LinkedList<>();
+        totalFinalStakes = 0;
     }
 
     /**
      * Play one session of the game and capture statistics
      *
-     * @return List of player stakes after one round at the table
+     * @return List of player stakes after one round at the table. The last
+     * value will contain the player's ending stake.
      */
-    public List<Integer> session() {
+    private List<Integer> session() {
 
         List<Integer> stakeValues = new LinkedList<>();
+        Player player = new Player.PlayerBuilder()
+                .type(playerType)
+                .table(game.getTable())
+                .stake(INIT_STAKE)
+                .roundsToGo(INIT_DURATION)
+                .build();
         while (player.playing()) {
             game.cycle(player);
             stakeValues.add(player.getStake());
         }
 
+        stakeValues.add(player.getStake());
+        totalFinalStakes += player.getStake();
         return stakeValues;
     }
 
@@ -97,8 +118,141 @@ public class Simulator {
 
         for (int session = 0; session < SAMPLES; session++) {
             List<Integer> sessionInfo = session();
+
+            finalStakes.add((Integer) ((LinkedList) sessionInfo).removeLast());
+
             durations.add(sessionInfo.size());
-            maxima.add(Collections.max(sessionInfo));
+            totalDurations += sessionInfo.size();
+
+            int max = Collections.max(sessionInfo);
+            maxima.add(max);
+            totalMaxima += max;
         }
+    }
+
+    /**
+     * Get the maximum durations that a player sat at a table for
+     *
+     * @return Maximum durations
+     */
+    public int getMaxDurations() {
+        return Collections.max(durations);
+    }
+
+    /**
+     * Get the maximum stake that a player finished with
+     *
+     * @return Maximum stake
+     */
+    public int getMaxStake() {
+        return Collections.max(maxima);
+    }
+
+    /**
+     * Get the maximum value of player's final stakes
+     *
+     * @return Maximum ending values
+     */
+    public int getMaxFinalStake() {
+        return Collections.max(finalStakes);
+    }
+
+    /**
+     * Get the average time the player sat at the table
+     *
+     * @return Average time the player sat at a table
+     */
+    public int getAverageDurations() {
+
+        if (durations.isEmpty()) {
+            return 0;
+        }
+
+        return totalDurations / durations.size();
+    }
+
+    /**
+     * Get the average maximum stake a player held
+     *
+     * @return Average maximum stake
+     */
+    public int getAverageMaximumStake() {
+
+        if (maxima.isEmpty()) {
+            return 0;
+        }
+
+        return totalMaxima / maxima.size();
+    }
+
+    /**
+     * Get the average final stake a player held
+     *
+     * @return Average final stake
+     */
+    public int getAverageFinalStake() {
+
+        if (finalStakes.isEmpty()) {
+            return 0;
+        }
+
+        return totalFinalStakes / finalStakes.size();
+    }
+
+    /**
+     * Get the nth percentile of the durations
+     *
+     * @param percentile The percentile to find
+     * @return The percentile from the durations
+     * @throws IllegalArgumentException Thrown if percentile is not between 0
+     * and 100
+     */
+    public int getNthPercentileDurations(int percentile) {
+
+        if (percentile < 0 || percentile > 100) {
+            throw new IllegalArgumentException("Please use a value between 0 and 100");
+        }
+
+        Collections.sort(durations);
+        int location = percentile * durations.size() / 100;
+        return durations.get(location);
+    }
+
+    /**
+     * Get the nth percentile of the maximum stakes
+     *
+     * @param percentile The percentile to find
+     * @return The percentile from the maximum stakes
+     * @throws IllegalArgumentException Thrown if percentile is not between 0
+     * and 100
+     */
+    public int getNthPercentileMaximumStake(int percentile) {
+
+        if (percentile < 0 || percentile > 100) {
+            throw new IllegalArgumentException("Please use a value between 0 and 100");
+        }
+
+        Collections.sort(maxima);
+        int location = percentile * maxima.size() / 100;
+        return maxima.get(location);
+    }
+    
+    /**
+     * Get the nth percentile of the final stakes
+     *
+     * @param percentile The percentile to find
+     * @return The percentile from the final stakes
+     * @throws IllegalArgumentException Thrown if percentile is not between 0
+     * and 100
+     */
+    public int getNthPercentileFinalStake(int percentile) {
+
+        if (percentile < 0 || percentile > 100) {
+            throw new IllegalArgumentException("Please use a value between 0 and 100");
+        }
+
+        Collections.sort(finalStakes);
+        int location = percentile * finalStakes.size() / 100;
+        return finalStakes.get(location);
     }
 }
