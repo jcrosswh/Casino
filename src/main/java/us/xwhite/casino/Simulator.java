@@ -28,6 +28,7 @@ package us.xwhite.casino;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.BiFunction;
 
 /**
  * Simulator class that will gather information about number of rounds and
@@ -67,6 +68,27 @@ public class Simulator {
     private final Player.Type playerType;
 
     private final Game game;
+    
+    private BiFunction<List<Integer>, Integer, Integer> average = 
+        (list, total) -> {
+
+            if (list.isEmpty()) {
+                return 0;
+            }
+
+            return total / list.size();
+        };
+    
+    private BiFunction<List<Integer>, Integer, Integer> nthPercentile = 
+        (list, percentile) -> {
+                if (percentile < 0 || percentile > 100) {
+                    throw new IllegalArgumentException("Please use a value between 0 and 100");
+                }
+
+                Collections.sort(list);
+                int location = percentile * list.size() / 100;
+                return list.get(location);
+            };
 
     /**
      * Create a new simulator
@@ -164,11 +186,7 @@ public class Simulator {
      */
     public int getAverageDurations() {
 
-        if (durations.isEmpty()) {
-            return 0;
-        }
-
-        return totalDurations / durations.size();
+        return average.apply(durations, totalDurations);
     }
 
     /**
@@ -177,12 +195,8 @@ public class Simulator {
      * @return Average maximum stake
      */
     public int getAverageMaximumStake() {
-
-        if (maxima.isEmpty()) {
-            return 0;
-        }
-
-        return totalMaxima / maxima.size();
+        
+        return average.apply(maxima, totalMaxima);
     }
 
     /**
@@ -192,11 +206,7 @@ public class Simulator {
      */
     public int getAverageFinalStake() {
 
-        if (finalStakes.isEmpty()) {
-            return 0;
-        }
-
-        return totalFinalStakes / finalStakes.size();
+        return average.apply(finalStakes, totalFinalStakes);
     }
 
     /**
@@ -209,13 +219,7 @@ public class Simulator {
      */
     public int getNthPercentileDurations(int percentile) {
 
-        if (percentile < 0 || percentile > 100) {
-            throw new IllegalArgumentException("Please use a value between 0 and 100");
-        }
-
-        Collections.sort(durations);
-        int location = percentile * durations.size() / 100;
-        return durations.get(location);
+        return nthPercentile.apply(durations, percentile);
     }
 
     /**
@@ -228,13 +232,7 @@ public class Simulator {
      */
     public int getNthPercentileMaximumStake(int percentile) {
 
-        if (percentile < 0 || percentile > 100) {
-            throw new IllegalArgumentException("Please use a value between 0 and 100");
-        }
-
-        Collections.sort(maxima);
-        int location = percentile * maxima.size() / 100;
-        return maxima.get(location);
+        return nthPercentile.apply(maxima, percentile);
     }
     
     /**
@@ -247,12 +245,6 @@ public class Simulator {
      */
     public int getNthPercentileFinalStake(int percentile) {
 
-        if (percentile < 0 || percentile > 100) {
-            throw new IllegalArgumentException("Please use a value between 0 and 100");
-        }
-
-        Collections.sort(finalStakes);
-        int location = percentile * finalStakes.size() / 100;
-        return finalStakes.get(location);
+        return nthPercentile.apply(finalStakes, percentile);
     }
 }
