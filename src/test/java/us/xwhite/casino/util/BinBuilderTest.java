@@ -59,7 +59,7 @@ public class BinBuilderTest {
 
         // bypassing the singleton instantiator so we can test creating the bins
         WheelBuilder builder = new Wheel.WheelBuilder().rng(new Random());
-        for (Constructor wheelConstructor : Wheel.class.getDeclaredConstructors()) {
+        for (Constructor<?> wheelConstructor : Wheel.class.getDeclaredConstructors()) {
             if (wheelConstructor.getParameterCount() == 1 && wheelConstructor.getParameterTypes()[0].equals(WheelBuilder.class)) {
                 wheelConstructor.setAccessible(true);
                 try {

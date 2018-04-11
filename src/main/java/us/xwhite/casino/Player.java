@@ -103,7 +103,7 @@ public abstract class Player {
         placeBet(new Bet(amount, outcome, player));
     }
 
-    private void placeBet(Bet bet) throws InvalidBetException {
+    protected void placeBet(Bet bet) throws InvalidBetException {
         try {
             table.placeBet(bet);
             stake -= bet.loseAmount();
