@@ -93,4 +93,14 @@ public class Bin {
     public String toString() {
         return outcomes.toString();
     }
+
+    /**
+     * Return a copy of passed in bin
+     *
+     * @param bin Bin to create a copy of
+     * @return New bin
+     */
+    public static Bin of(Bin bin) {
+        return new Bin(bin.outcomes);
+    }
 }

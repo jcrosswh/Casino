@@ -105,7 +105,7 @@ public class Wheel {
      * @return Bin at this location
      */
     private Bin get(int bin) {
-        return bins.get(bin);
+        return Bin.of(bins.get(bin));
     }
 
     /**

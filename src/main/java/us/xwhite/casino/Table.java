@@ -25,6 +25,7 @@
  */
 package us.xwhite.casino;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -95,13 +96,13 @@ public class Table implements Iterable<Bet> {
     }
 
     /**
-     * Get an iterator for the placed bets
+     * Get an unmodifiable iterator for the placed bets
      *
      * @return Iterator for bets
      */
     @Override
     public Iterator<Bet> iterator() {
-        return bets.iterator();
+        return Collections.unmodifiableList(bets).iterator();
     }
 
     /**

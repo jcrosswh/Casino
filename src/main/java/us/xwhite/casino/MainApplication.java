@@ -48,7 +48,7 @@ public class MainApplication {
         Simulator simulator = new Simulator(game, Player.Type.Martingale);
         simulator.gather();
 
-        StringBuilder sb = new StringBuilder()
+        System.out.println(new StringBuilder()
                 .append("Starting durations: ").append(Simulator.INIT_DURATION).append(System.lineSeparator())
                 .append("Starting stake: ").append(Simulator.INIT_STAKE).append(System.lineSeparator())
                 .append("Number of simulations: ").append(Simulator.SAMPLES).append(System.lineSeparator())
@@ -63,7 +63,7 @@ public class MainApplication {
                 .append("50th percentile final stake: ").append(simulator.getNthPercentileFinalStake(50)).append(System.lineSeparator())
                 .append("90th percentile duration: ").append(simulator.getNthPercentileDurations(90)).append(System.lineSeparator())
                 .append("90th percentile maximum stake: ").append(simulator.getNthPercentileMaximumStake(90)).append(System.lineSeparator())
-                .append("90th percentile final stake: ").append(simulator.getNthPercentileFinalStake(90)).append(System.lineSeparator());
-        System.out.println(sb.toString());
+                .append("90th percentile final stake: ").append(simulator.getNthPercentileFinalStake(90)).append(System.lineSeparator())
+                .toString());
     }
 }
