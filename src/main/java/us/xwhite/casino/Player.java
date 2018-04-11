@@ -200,9 +200,9 @@ public abstract class Player {
 
             switch (type) {
                 case Martingale:
-                    return new Martingale(table, Simulator.INIT_STAKE, Simulator.INIT_DURATION);
+                    return new Martingale(table, stake, roundsToGo);
                 case Passenger57:
-                    return new Passenger57(table, Simulator.INIT_STAKE, Simulator.INIT_DURATION);
+                    return new Passenger57(table, stake, roundsToGo);
                 default:
                     break;
             }

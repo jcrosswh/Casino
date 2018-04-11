@@ -43,15 +43,9 @@ class NonRandom extends Random {
      * Set the random value that should always be returned
      *
      * @param value Value that is always returned
-     * @throws IndexOutOfBoundsException Thrown if value is less than 0 or
-     * greater than {@link Wheel#MAX_BINS}
      */
     @Override
     public void setSeed(long value) {
-
-        if (value < 0 && value >= Wheel.MAX_BINS) {
-            throw new IndexOutOfBoundsException("Seed values must be between 0 and Wheel.MAX_BINS");
-        }
 
         this.value = (int) value;
     }

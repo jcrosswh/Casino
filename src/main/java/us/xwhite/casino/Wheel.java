@@ -118,7 +118,7 @@ public class Wheel {
      */
     private boolean add(int bin, Outcome outcome) {
 
-        if (bin < 0 && bin >= MAX_BINS) {
+        if (bin < 0 || bin >= MAX_BINS) {
             throw new IndexOutOfBoundsException("Index value must be between 0 and Wheel.MAX_BINS");
         }
 

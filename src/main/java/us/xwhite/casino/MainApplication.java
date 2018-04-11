@@ -61,9 +61,9 @@ public class MainApplication {
                 .append("50th percentile duration: ").append(simulator.getNthPercentileDurations(50)).append(System.lineSeparator())
                 .append("50th percentile maximum stake: ").append(simulator.getNthPercentileMaximumStake(50)).append(System.lineSeparator())
                 .append("50th percentile final stake: ").append(simulator.getNthPercentileFinalStake(50)).append(System.lineSeparator())
-                .append("90th percentile duration: ").append(simulator.getNthPercentileDurations(90)).append(System.lineSeparator())
-                .append("90th percentile maximum stake: ").append(simulator.getNthPercentileMaximumStake(90)).append(System.lineSeparator())
-                .append("90th percentile final stake: ").append(simulator.getNthPercentileFinalStake(90)).append(System.lineSeparator())
+                .append("10th percentile duration: ").append(simulator.getNthPercentileDurations(10)).append(System.lineSeparator())
+                .append("10th percentile maximum stake: ").append(simulator.getNthPercentileMaximumStake(10)).append(System.lineSeparator())
+                .append("10th percentile final stake: ").append(simulator.getNthPercentileFinalStake(10)).append(System.lineSeparator())
                 .toString());
     }
 }

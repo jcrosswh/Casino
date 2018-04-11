@@ -86,7 +86,7 @@ public class Simulator {
                 }
 
                 Collections.sort(list);
-                int location = percentile * list.size() / 100;
+                int location = (100 - percentile) * list.size() / 100;
                 return list.get(location);
             };
 

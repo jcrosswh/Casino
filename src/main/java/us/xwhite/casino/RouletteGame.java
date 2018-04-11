@@ -36,42 +36,42 @@ public class RouletteGame implements Game {
     /**
      * Odds for straight bets (35:1)
      */
-    public static int STRAIGHT_BET_ODDS = 35;
+    public static final int STRAIGHT_BET_ODDS = 35;
 
     /**
      * Odds for split bets (17:1)
      */
-    public static int SPLIT_BET_ODDS = 17;
+    public static final int SPLIT_BET_ODDS = 17;
 
     /**
      * Odds for street bets (11:1)
      */
-    public static int STREET_BET_ODDS = 11;
+    public static final int STREET_BET_ODDS = 11;
 
     /**
      * Odds for corner bets (8:1)
      */
-    public static int CORNER_BET_ODDS = 8;
+    public static final int CORNER_BET_ODDS = 8;
 
     /**
      * Odds for line bets (5:1)
      */
-    public static int LINE_BET_ODDS = 5;
+    public static final int LINE_BET_ODDS = 5;
 
     /**
      * Odds for dozen bets (2:1)
      */
-    public static int DOZEN_BET_ODDS = 2;
+    public static final int DOZEN_BET_ODDS = 2;
 
     /**
      * Odds for column bets (2:1)
      */
-    public static int COLUMN_BET_ODDS = 2;
+    public static final int COLUMN_BET_ODDS = 2;
 
     /**
      * Odds for even money bets (1:1)
      */
-    public static int EVEN_MONEY_BET_ODDS = 1;
+    public static final int EVEN_MONEY_BET_ODDS = 1;
 
     private final Wheel wheel;
 
