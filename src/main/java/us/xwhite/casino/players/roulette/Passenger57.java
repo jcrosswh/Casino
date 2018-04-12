@@ -37,7 +37,7 @@ import us.xwhite.casino.Wheel;
  *
  * @author Joel Crosswhite <joel.crosswhite@ix.netcom.com>
  */
-public final class Passenger57 extends Player {
+public class Passenger57 extends Player {
 
     /**
      * Create a new Passenger57 player on this table

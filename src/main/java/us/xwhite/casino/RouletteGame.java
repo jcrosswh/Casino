@@ -25,6 +25,9 @@
  */
 package us.xwhite.casino;
 
+import java.util.Collections;
+import java.util.Set;
+
 /**
  * Game for playing Roulette. To invoke this game, instantiate the object and
  * call cycle as many times as wished
@@ -94,17 +97,20 @@ public class RouletteGame implements Game {
      * player of all winning and losing bets.
      *
      * @param player Player playing the game
+     * @return The winning outcomes. Will return an empty set if the player
+     * didn't play
      */
     @Override
-    public void cycle(Player player) {
+    public Set<Outcome> cycle(Player player) {
 
         if (player == null || !player.playing()) {
-            return;
+            return Collections.emptySet();
         }
 
         player.placeBets();
 
         Bin winner = wheel.next();
+        Set<Outcome> winningOutcomes = winner.getOutcomes();
 
         for (Bet bet : table) {
 
@@ -114,10 +120,12 @@ public class RouletteGame implements Game {
                 player.lose(bet);
             }
         }
-        
+
+        player.winners(winningOutcomes);
         table.clearBets();
+        return winningOutcomes;
     }
-    
+
     @Override
     public Table getTable() {
         return table;

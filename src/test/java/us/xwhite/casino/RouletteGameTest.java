@@ -26,6 +26,8 @@
 package us.xwhite.casino;
 
 import java.util.Random;
+import java.util.Set;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -63,16 +65,21 @@ public class RouletteGameTest {
         Bet bet = new Bet(100, Wheel.getOutcome("Black"), player);
         table.placeBet(bet);
 
-        game.cycle(player);
+        Set<Outcome> outcomes = game.cycle(player);
         Mockito.verify(wheel, Mockito.times(1)).next();
         Mockito.verify(player, Mockito.times(1)).win(Mockito.any(Bet.class));
+        Assert.assertNotNull(outcomes);
+        Assert.assertEquals(14, outcomes.size());
+        Assert.assertTrue(outcomes.contains(Wheel.getOutcome("Black")));
+        Mockito.verify(player, Mockito.times(1)).winners(outcomes);
     }
 
     @Test
     public void cycleNullPlayerTest() {
 
-        game.cycle(null);
+        Set<Outcome> outcomes = game.cycle(null);
         Mockito.verify(wheel, Mockito.times(0)).next();
+        Assert.assertEquals(0, outcomes.size());
     }
 
     @Test
@@ -82,7 +89,8 @@ public class RouletteGameTest {
 
         Mockito.when(player.playing()).thenReturn(false);
 
-        game.cycle(player);
+        Set<Outcome> outcomes = game.cycle(player);
         Mockito.verify(wheel, Mockito.times(0)).next();
+        Assert.assertEquals(0, outcomes.size());
     }
 }

@@ -26,6 +26,7 @@
 package us.xwhite.casino;
 
 import java.util.Arrays;
+import java.util.Set;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -70,5 +71,25 @@ public class BinTest {
         Assert.assertTrue(instance.contains(outcome));
         
         Assert.assertFalse(instance.contains(new Outcome("Some other outcome" ,7)));
+    }
+    
+    @Test
+    public void getOutcomesTest() {
+        
+        Outcome outcome = new Outcome("Test outcome", 5);
+        Bin instance = new Bin();
+        instance.add(outcome);
+        
+        Set<Outcome> outcomes = instance.getOutcomes();
+        Assert.assertNotNull(outcomes);
+        Assert.assertEquals(1, outcomes.size());
+        Assert.assertTrue(outcomes.contains(outcome));
+        
+        try {
+            outcomes.add(null);
+            Assert.fail("Expecting to throw an exception");
+        } catch (UnsupportedOperationException uoe) {
+            // do nothing, expecting an exception
+        }
     }
 }

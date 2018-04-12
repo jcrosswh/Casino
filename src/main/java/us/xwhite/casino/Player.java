@@ -25,10 +25,12 @@
  */
 package us.xwhite.casino;
 
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import us.xwhite.casino.players.roulette.Martingale;
 import us.xwhite.casino.players.roulette.Passenger57;
+import us.xwhite.casino.players.roulette.SevenReds;
 
 /**
  * Template for all players
@@ -99,6 +101,15 @@ public abstract class Player {
         return stake;
     }
 
+    /**
+     * Notify the player of the winning outcomes
+     *
+     * @param outcomes The winning outcomes
+     */
+    public void winners(Set<Outcome> outcomes) {
+        // do nothing for now
+    }
+
     protected void placeBet(int amount, Outcome outcome, Player player) throws InvalidBetException {
         placeBet(new Bet(amount, outcome, player));
     }
@@ -112,6 +123,10 @@ public abstract class Player {
             Logger.getLogger(Player.class.getName()).log(Level.FINE, null, ex);
             throw ex;
         }
+    }
+    
+    protected void reduceRoundsToGo() {
+        roundsToGo--;
     }
 
     /**
@@ -203,6 +218,8 @@ public abstract class Player {
                     return new Martingale(table, stake, roundsToGo);
                 case Passenger57:
                     return new Passenger57(table, stake, roundsToGo);
+                case SevenReds:
+                    return new SevenReds(table, stake, roundsToGo);
                 default:
                     break;
             }
@@ -215,6 +232,7 @@ public abstract class Player {
      */
     public enum Type {
         Passenger57,
-        Martingale
+        Martingale,
+        SevenReds
     }
 }

@@ -113,6 +113,7 @@ public class BinBuilderTest {
 
         Assert.assertEquals(1, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 0))).size());
         Assert.assertEquals(11, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 1))).size());
+        Assert.assertEquals(14, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 4))).size());
         Assert.assertEquals(17, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 17))).size());
         Assert.assertEquals(11, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 36))).size());
         Assert.assertEquals(1, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 37))).size());
@@ -128,6 +129,7 @@ public class BinBuilderTest {
 
         Assert.assertEquals(1, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 0))).size());
         Assert.assertEquals(1, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 1))).size());
+        Assert.assertEquals(1, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 4))).size());
         Assert.assertEquals(1, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 17))).size());
         Assert.assertEquals(1, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 36))).size());
         Assert.assertEquals(1, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 37))).size());
@@ -143,6 +145,7 @@ public class BinBuilderTest {
 
         Assert.assertEquals(0, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 0))).size());
         Assert.assertEquals(2, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 1))).size());
+        Assert.assertEquals(3, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 4))).size());
         Assert.assertEquals(4, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 17))).size());
         Assert.assertEquals(2, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 36))).size());
         Assert.assertEquals(0, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 37))).size());
@@ -158,6 +161,7 @@ public class BinBuilderTest {
 
         Assert.assertEquals(0, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 0))).size());
         Assert.assertEquals(1, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 1))).size());
+        Assert.assertEquals(1, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 4))).size());
         Assert.assertEquals(1, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 17))).size());
         Assert.assertEquals(1, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 36))).size());
         Assert.assertEquals(0, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 37))).size());
@@ -173,6 +177,7 @@ public class BinBuilderTest {
 
         Assert.assertEquals(0, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 0))).size());
         Assert.assertEquals(1, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 1))).size());
+        Assert.assertEquals(2, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 4))).size());
         Assert.assertEquals(4, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 17))).size());
         Assert.assertEquals(1, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 36))).size());
         Assert.assertEquals(0, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 37))).size());
@@ -188,6 +193,7 @@ public class BinBuilderTest {
 
         Assert.assertEquals(0, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 0))).size());
         Assert.assertEquals(1, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 1))).size());
+        Assert.assertEquals(2, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 4))).size());
         Assert.assertEquals(2, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 17))).size());
         Assert.assertEquals(1, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 36))).size());
         Assert.assertEquals(0, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 37))).size());
@@ -203,6 +209,7 @@ public class BinBuilderTest {
 
         Assert.assertEquals(0, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 0))).size());
         Assert.assertEquals(1, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 1))).size());
+        Assert.assertEquals(1, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 4))).size());
         Assert.assertEquals(1, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 17))).size());
         Assert.assertEquals(1, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 36))).size());
         Assert.assertEquals(0, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 37))).size());
@@ -218,6 +225,7 @@ public class BinBuilderTest {
 
         Assert.assertEquals(0, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 0))).size());
         Assert.assertEquals(1, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 1))).size());
+        Assert.assertEquals(1, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 4))).size());
         Assert.assertEquals(1, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 17))).size());
         Assert.assertEquals(1, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 36))).size());
         Assert.assertEquals(0, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 37))).size());
@@ -233,6 +241,7 @@ public class BinBuilderTest {
 
         Assert.assertEquals(0, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 0))).size());
         Assert.assertEquals(3, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 1))).size());
+        Assert.assertEquals(3, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 4))).size());
         Assert.assertEquals(3, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 17))).size());
         Assert.assertEquals(3, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 36))).size());
         Assert.assertEquals(0, ((Set) outcomesField.get(wheelGetMethod.invoke(wheel, 37))).size());

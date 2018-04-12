@@ -27,6 +27,7 @@ package us.xwhite.casino;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -92,6 +93,15 @@ public class Bin {
     @Override
     public String toString() {
         return outcomes.toString();
+    }
+
+    /**
+     * Get the outcomes for this bin
+     *
+     * @return An immutable set of outcomes
+     */
+    public Set<Outcome> getOutcomes() {
+        return Collections.unmodifiableSet(outcomes);
     }
 
     /**

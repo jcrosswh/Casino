@@ -25,8 +25,6 @@
  */
 package us.xwhite.casino.players.roulette;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import us.xwhite.casino.Bet;
 import us.xwhite.casino.InvalidBetException;
 import us.xwhite.casino.Player;
@@ -42,7 +40,7 @@ import us.xwhite.casino.Wheel;
  *
  * @author Joel Crosswhite <joel.crosswhite@ix.netcom.com>
  */
-public final class Martingale extends Player {
+public class Martingale extends Player {
 
     private int loseCount;
     

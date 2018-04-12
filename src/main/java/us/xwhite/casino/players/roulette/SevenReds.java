@@ -23,31 +23,45 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package us.xwhite.casino;
+package us.xwhite.casino.players.roulette;
 
 import java.util.Set;
+import us.xwhite.casino.Outcome;
+import us.xwhite.casino.Table;
+import us.xwhite.casino.Wheel;
 
 /**
- * Interface to all casino games
  *
  * @author Joel Crosswhite <joel.crosswhite@ix.netcom.com>
  */
-public interface Game {
+public class SevenReds extends Martingale {
+    
+    private int redCount;
+    
+    private final Outcome redOutcome;
 
-    /**
-     * Play one cycle of the game. This will take the player, ask the player to
-     * place their bets, play a round of the game, then notify the player of all
-     * winning and losing bets.
-     *
-     * @param player Player playing the game
-     * @return The set of outcomes that won
-     */
-    public Set<Outcome> cycle(Player player);
+    public SevenReds(Table table, int stake, int roundsToGo) {
+        super(table, stake, roundsToGo);
+        redCount = 7;
+        redOutcome = Wheel.getOutcome(Wheel.BinBuilder.BETS.getString("bet.red"));
+    }
+    
+    @Override
+    public void winners(Set<Outcome> outcomes) {
+        if (outcomes.contains(redOutcome)) {
+            redCount--;
+        } else {
+            redCount = 7;
+        }
+    }
 
-    /**
-     * Retrieve the table for this game
-     *
-     * @return The table this game has set
-     */
-    public Table getTable();
+    @Override
+    public void placeBets() {
+        if (redCount <= 0) {
+            super.placeBets();
+        } else {
+            reduceRoundsToGo();
+        }
+    }
+
 }
