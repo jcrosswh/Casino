@@ -53,6 +53,15 @@ public class WheelTest {
 
         Assert.assertTrue(wheel.next().contains(Wheel.getOutcome(Integer.toString(seed))));
     }
+    
+    @Test
+    public void verifyOutcomeCannotBeAddedTest() {
+        
+        Outcome invalidOutcome = new Outcome("Not a valid outcome", 17);
+        
+        Assert.assertTrue(wheel.next().add(invalidOutcome));
+        Assert.assertFalse(wheel.next().contains(invalidOutcome));
+    }
 
     @Test
     public void getOutcomeTest() {

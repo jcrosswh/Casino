@@ -91,5 +91,10 @@ public class BinTest {
         } catch (UnsupportedOperationException uoe) {
             // do nothing, expecting an exception
         }
+        
+        Object[] outcomesArray = outcomes.toArray();
+        Assert.assertEquals(1, outcomesArray.length);
+        outcomesArray[0] = null;
+        Assert.assertTrue(outcomes.contains(outcome));
     }
 }
