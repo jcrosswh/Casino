@@ -25,6 +25,11 @@
  */
 package us.xwhite.casino;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -47,23 +52,29 @@ public class MainApplication {
 
         Simulator simulator = new Simulator(game, Player.Type.Martingale);
         simulator.gather();
+        List<Integer> durations = new ArrayList<>(simulator.getDurations());
+        List<Integer> maxStakes = new ArrayList<>(simulator.getMaxima());
+        List<Integer> finalStakes = new ArrayList<>(simulator.getFinalStakes());
 
         System.out.println(new StringBuilder()
                 .append("Starting durations: ").append(Simulator.INIT_DURATION).append(System.lineSeparator())
                 .append("Starting stake: ").append(Simulator.INIT_STAKE).append(System.lineSeparator())
                 .append("Number of simulations: ").append(Simulator.SAMPLES).append(System.lineSeparator())
-                .append("Max durations: ").append(simulator.getMaxDurations()).append(System.lineSeparator())
-                .append("Max stake: ").append(simulator.getMaxStake()).append(System.lineSeparator())
-                .append("Max final stake: ").append(simulator.getMaxFinalStake()).append(System.lineSeparator())
-                .append("Average duration: ").append(simulator.getAverageDurations()).append(System.lineSeparator())
-                .append("Average stake: ").append(simulator.getAverageMaximumStake()).append(System.lineSeparator())
-                .append("Average final stake: ").append(simulator.getAverageFinalStake()).append(System.lineSeparator())
-                .append("50th percentile duration: ").append(simulator.getNthPercentileDurations(50)).append(System.lineSeparator())
-                .append("50th percentile maximum stake: ").append(simulator.getNthPercentileMaximumStake(50)).append(System.lineSeparator())
-                .append("50th percentile final stake: ").append(simulator.getNthPercentileFinalStake(50)).append(System.lineSeparator())
-                .append("10th percentile duration: ").append(simulator.getNthPercentileDurations(10)).append(System.lineSeparator())
-                .append("10th percentile maximum stake: ").append(simulator.getNthPercentileMaximumStake(10)).append(System.lineSeparator())
-                .append("10th percentile final stake: ").append(simulator.getNthPercentileFinalStake(10)).append(System.lineSeparator())
+                .append("Max durations: ").append(Collections.max(durations)).append(System.lineSeparator())
+                .append("Max maximum stake: ").append(Collections.max(maxStakes)).append(System.lineSeparator())
+                .append("Max final stake: ").append(Collections.max(finalStakes)).append(System.lineSeparator())
+                .append("Average duration: ").append(IntegerStatistics.MEAN.apply(durations)).append(System.lineSeparator())
+                .append("Average maximum stake: ").append(IntegerStatistics.MEAN.apply(maxStakes)).append(System.lineSeparator())
+                .append("Average final stake: ").append(IntegerStatistics.MEAN.apply(finalStakes)).append(System.lineSeparator())
+                .append("50th percentile duration: ").append(IntegerStatistics.NTH_PERCENTILE.apply(durations, 50)).append(System.lineSeparator())
+                .append("50th percentile maximum stake: ").append(IntegerStatistics.NTH_PERCENTILE.apply(maxStakes, 50)).append(System.lineSeparator())
+                .append("50th percentile final stake: ").append(IntegerStatistics.NTH_PERCENTILE.apply(finalStakes, 50)).append(System.lineSeparator())
+                .append("90th percentile duration: ").append(IntegerStatistics.NTH_PERCENTILE.apply(durations, 90)).append(System.lineSeparator())
+                .append("90th percentile maximum stake: ").append(IntegerStatistics.NTH_PERCENTILE.apply(maxStakes, 90)).append(System.lineSeparator())
+                .append("90th percentile final stake: ").append(IntegerStatistics.NTH_PERCENTILE.apply(finalStakes, 90)).append(System.lineSeparator())
+                .append("Standard deviation for durations: ").append(new BigDecimal(IntegerStatistics.STANDARD_DEVIATION.apply(durations)).setScale(2, RoundingMode.HALF_UP)).append(System.lineSeparator())
+                .append("Standard deviation for maximum stakes: ").append(new BigDecimal(IntegerStatistics.STANDARD_DEVIATION.apply(maxStakes)).setScale(2, RoundingMode.HALF_UP)).append(System.lineSeparator())
+                .append("Standard deviation for final stakes: ").append(new BigDecimal(IntegerStatistics.STANDARD_DEVIATION.apply(finalStakes)).setScale(2, RoundingMode.HALF_UP)).append(System.lineSeparator())
                 .toString());
     }
 }

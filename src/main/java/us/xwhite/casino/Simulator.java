@@ -55,40 +55,13 @@ public class Simulator {
 
     private final List<Integer> durations;
 
-    private int totalDurations;
-
     private final List<Integer> maxima;
 
-    private int totalMaxima;
-
     private final List<Integer> finalStakes;
-
-    private int totalFinalStakes;
 
     private final Player.Type playerType;
 
     private final Game game;
-    
-    private BiFunction<List<Integer>, Integer, Integer> average = 
-        (list, total) -> {
-
-            if (list.isEmpty()) {
-                return 0;
-            }
-
-            return total / list.size();
-        };
-    
-    private BiFunction<List<Integer>, Integer, Integer> nthPercentile = 
-        (list, percentile) -> {
-                if (percentile < 0 || percentile > 100) {
-                    throw new IllegalArgumentException("Please use a value between 0 and 100");
-                }
-
-                Collections.sort(list);
-                int location = (100 - percentile) * list.size() / 100;
-                return list.get(location);
-            };
 
     /**
      * Create a new simulator
@@ -101,11 +74,8 @@ public class Simulator {
         this.game = game;
 
         durations = new LinkedList<>();
-        totalDurations = 0;
         maxima = new LinkedList<>();
-        totalMaxima = 0;
         finalStakes = new LinkedList<>();
-        totalFinalStakes = 0;
     }
 
     /**
@@ -129,7 +99,6 @@ public class Simulator {
         }
 
         stakeValues.add(player.getStake());
-        totalFinalStakes += player.getStake();
         return stakeValues;
     }
 
@@ -144,107 +113,21 @@ public class Simulator {
             finalStakes.add((Integer) ((LinkedList) sessionInfo).removeLast());
 
             durations.add(sessionInfo.size());
-            totalDurations += sessionInfo.size();
 
             int max = Collections.max(sessionInfo);
             maxima.add(max);
-            totalMaxima += max;
         }
     }
 
-    /**
-     * Get the maximum durations that a player sat at a table for
-     *
-     * @return Maximum durations
-     */
-    public int getMaxDurations() {
-        return Collections.max(durations);
+    public List<Integer> getDurations() {
+        return Collections.unmodifiableList(durations);
     }
 
-    /**
-     * Get the maximum stake that a player finished with
-     *
-     * @return Maximum stake
-     */
-    public int getMaxStake() {
-        return Collections.max(maxima);
+    public List<Integer> getMaxima() {
+        return Collections.unmodifiableList(maxima);
     }
 
-    /**
-     * Get the maximum value of player's final stakes
-     *
-     * @return Maximum ending values
-     */
-    public int getMaxFinalStake() {
-        return Collections.max(finalStakes);
-    }
-
-    /**
-     * Get the average time the player sat at the table
-     *
-     * @return Average time the player sat at a table
-     */
-    public int getAverageDurations() {
-
-        return average.apply(durations, totalDurations);
-    }
-
-    /**
-     * Get the average maximum stake a player held
-     *
-     * @return Average maximum stake
-     */
-    public int getAverageMaximumStake() {
-        
-        return average.apply(maxima, totalMaxima);
-    }
-
-    /**
-     * Get the average final stake a player held
-     *
-     * @return Average final stake
-     */
-    public int getAverageFinalStake() {
-
-        return average.apply(finalStakes, totalFinalStakes);
-    }
-
-    /**
-     * Get the nth percentile of the durations
-     *
-     * @param percentile The percentile to find
-     * @return The percentile from the durations
-     * @throws IllegalArgumentException Thrown if percentile is not between 0
-     * and 100
-     */
-    public int getNthPercentileDurations(int percentile) {
-
-        return nthPercentile.apply(durations, percentile);
-    }
-
-    /**
-     * Get the nth percentile of the maximum stakes
-     *
-     * @param percentile The percentile to find
-     * @return The percentile from the maximum stakes
-     * @throws IllegalArgumentException Thrown if percentile is not between 0
-     * and 100
-     */
-    public int getNthPercentileMaximumStake(int percentile) {
-
-        return nthPercentile.apply(maxima, percentile);
-    }
-    
-    /**
-     * Get the nth percentile of the final stakes
-     *
-     * @param percentile The percentile to find
-     * @return The percentile from the final stakes
-     * @throws IllegalArgumentException Thrown if percentile is not between 0
-     * and 100
-     */
-    public int getNthPercentileFinalStake(int percentile) {
-
-        return nthPercentile.apply(finalStakes, percentile);
+    public List<Integer> getFinalStakes() {
+        return Collections.unmodifiableList(finalStakes);
     }
 }
