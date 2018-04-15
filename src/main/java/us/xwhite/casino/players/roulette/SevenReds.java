@@ -35,17 +35,25 @@ import us.xwhite.casino.Wheel;
  * @author Joel Crosswhite <joel.crosswhite@ix.netcom.com>
  */
 public class SevenReds extends Martingale {
-    
+
     private int redCount;
-    
+
     private final Outcome redOutcome;
 
+    /**
+     * Create a new SevenReds player on this table
+     *
+     * @param table
+     * @param stake Player's starting stake in betting units
+     * @param roundsToGo Player's starting number of rounds they are willing to
+     * play
+     */
     public SevenReds(Table table, int stake, int roundsToGo) {
         super(table, stake, roundsToGo);
         redCount = 7;
         redOutcome = Wheel.getOutcome(Wheel.BinBuilder.BETS.getString("bet.red"));
     }
-    
+
     @Override
     public void winners(Set<Outcome> outcomes) {
         if (outcomes.contains(redOutcome)) {

@@ -110,10 +110,26 @@ public abstract class Player {
         // do nothing for now
     }
 
+    /**
+     * Allow a player to place a bet on the table
+     *
+     * @param amount Amount of the bet to place
+     * @param outcome The outcome to place the bet on
+     * @param player The player placing the bet
+     * @throws InvalidBetException Thrown if the bet would be invalid on the
+     * table
+     */
     protected void placeBet(int amount, Outcome outcome, Player player) throws InvalidBetException {
         placeBet(new Bet(amount, outcome, player));
     }
 
+    /**
+     * Allow a player to place a bet on the table
+     *
+     * @param bet The bet to place
+     * @throws InvalidBetException Thrown if the bet would be invalid on the
+     * table
+     */
     protected void placeBet(Bet bet) throws InvalidBetException {
         try {
             table.placeBet(bet);
@@ -124,7 +140,10 @@ public abstract class Player {
             throw ex;
         }
     }
-    
+
+    /**
+     * Decrement the rounds to go by one
+     */
     protected void reduceRoundsToGo() {
         roundsToGo--;
     }
@@ -231,8 +250,20 @@ public abstract class Player {
      * Different types of players that are allowed
      */
     public enum Type {
+
+        /**
+         * Enum value for {@link Passenger57}
+         */
         Passenger57,
+        
+        /**
+         * Enum value for {@link Martingale}
+         */
         Martingale,
+        
+        /**
+         * Enum value for {@link SevenReds}
+         */
         SevenReds
     }
 }

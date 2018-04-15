@@ -178,6 +178,9 @@ public class Wheel {
      */
     public static class BinBuilder {
 
+        /**
+         * ResourceBundle to pull bet names from a property file
+         */
         public final static ResourceBundle BETS;
 
         static {

@@ -119,14 +119,29 @@ public class Simulator {
         }
     }
 
+    /**
+     * Get the list of durations
+     *
+     * @return An unmodifiable list of the durations
+     */
     public List<Integer> getDurations() {
         return Collections.unmodifiableList(durations);
     }
 
+    /**
+     * Get the list of maximum stakes seen by the player
+     *
+     * @return An unmodifiable list of the maximum stakes
+     */
     public List<Integer> getMaxima() {
         return Collections.unmodifiableList(maxima);
     }
 
+    /**
+     * Get the list of the final stakes seen by the player
+     *
+     * @return An unmodifiable list of the final stakes
+     */
     public List<Integer> getFinalStakes() {
         return Collections.unmodifiableList(finalStakes);
     }

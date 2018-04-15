@@ -33,11 +33,15 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
+ * Class providing functions for obtaining statistics on simulations
  *
  * @author Joel Crosswhite <joel.crosswhite@ix.netcom.com>
  */
 public final class IntegerStatistics {
 
+    /**
+     * Get the average value from a list of integers
+     */
     public static final Function<List<Integer>, Double> MEAN
             = (list) -> {
 
@@ -48,6 +52,9 @@ public final class IntegerStatistics {
                 return (double) list.parallelStream().reduce(0, Integer::sum) / list.size();
             };
 
+    /**
+     * Obtain the nth percentile from the list of integers
+     */
     public static final BiFunction<List<Integer>, Integer, Integer> NTH_PERCENTILE
             = (list, percentile) -> {
                 if (percentile <= 0 || percentile >= 100) {
@@ -60,6 +67,9 @@ public final class IntegerStatistics {
                 return list.get(location);
             };
 
+    /**
+     * Get the standard deviation from the list of integers
+     */
     public static final Function<List<Integer>, Double> STANDARD_DEVIATION
             = (list) -> {
                 double mean = MEAN.apply(list);
