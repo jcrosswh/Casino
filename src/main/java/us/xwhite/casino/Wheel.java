@@ -28,6 +28,8 @@ package us.xwhite.casino;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -87,6 +89,15 @@ public class Wheel {
         }
 
         return ALL_OUTCOMES.get(name);
+    }
+
+    /**
+     * Get a collection of all known values in the game
+     *
+     * @return Unmodifiable collection of all outcomes
+     */
+    public static Collection<Outcome> getOutcomes() {
+        return Collections.unmodifiableCollection(ALL_OUTCOMES.values());
     }
 
     /**

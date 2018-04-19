@@ -25,6 +25,8 @@
  */
 package us.xwhite.casino;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -76,5 +78,10 @@ public class BetTest {
     @Test
     public void loseAmountTest() {
         Assert.assertEquals(100, bet.loseAmount());
+    }
+    
+    @Test
+    public void toStringTest() {
+        Logger.getLogger(BetTest.class.getName()).log(Level.FINE, "bet:={0}", bet);
     }
 }
